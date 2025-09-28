@@ -1,0 +1,67 @@
+DNS servers:
+ns1.dnseven.com
+ns2.dnseven.net
+
+
+Domain(s) list:
+
+https://my.atex.ru/billmgr?func=domain&out=xml&authinfo={login}:{password}
+
+
+Domain add record:
+
+A:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=A&dns_name={dns_name}&ipv4={ip_address}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+AAAA:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=AAAA&dns_name={dns_name}&ipv6={ipv6_address}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+MX:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=MX&dns_name={dns_name}&mx={mx_server}&priority={priority}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+SRV:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=SRV&priority={priority}&ttl=3600&dns_name_srv={host}&srv_priority={srv_priority}&weight={weight}&port={port}&address={address}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+CNAME:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=CNAME&dns_name={dns_name}&canonical_name={sub_domain}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+TXT:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=TXT&dns_name={dns_name}&txt={txt_record}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+NS:
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=NS&ns_name={ns_name}&ns_field={ns_field}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml
+
+
+Domain get records:
+
+https://my.atex.ru/billmgr?elid={domain_id}&func=domain.dnsrecords&out=xml&authinfo={login}:{password}
+
+
+Domain edit record:
+To make edit request, you need to add elid={record_id} parameter to the add record request.
+
+Example A:
+https://my.atex.ru/billmgr?elid={record_id}&plid={domain_id}&func=domain.dnsrecords.edit&out=xml&authinfo={login}:{password}&dns_type=A&dns_name={dns_name}&ipv4={ip}&clicked_button=ok&sok=ok&ttl=3600
+
+
+Domain delete record:
+
+https://my.atex.ru/billmgr?elid={record_id}&func=domain.dnsrecords.delete&plid={domain_id}&out=xml&authinfo={login}:{password}
+
+
+DNS auto settings:
+https://my.atex.ru/billmgr?func=domain.dnsrecords.autoconfigns&elid={domain_id}&out=xml&authinfo={login}:{password}&clicked_button=ok&sok=ok
+
+
+DNSSEC:
+
+Get DNSSEC key (dns_to_add parameter in answer) and 3 DS records divided by '\n' (ds_to_add parameter)
+https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.dnssec&out=xml&authinfo={login}:{password}
+
+DNSSEC enable:
+https://my.atex.ru/billmgr?func=domain.dnsrecords.dnssec&plid={domain_id}&dns_to_add={dns_to_add}&ds_to_add={ds_to_add}&clicked_button=ok&sok=ok&out=xml&authinfo={login}:{password}
+
+
+Edit SOA:
+
+https://my.atex.ru/billmgr?func=domain.dnsrecords.editsoa&elid=&plid={domain_id}&dns_type=SOA&dns_name={dns_name}&email={email}&refresh={refresh}&retry={retry}&expire={expire}&minimum={minimum}&ttl={ttl}&clicked_button=ok&sok=ok&out=xml&authinfo={login}:{password}
