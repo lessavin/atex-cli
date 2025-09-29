@@ -36,22 +36,26 @@ parser_add_a = subparsers.add_parser("add_a", help="domain add A record")
 parser_add_a.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_a.add_argument("dns_name", type=str, help="DNS name")
 parser_add_a.add_argument("ip_address", type=str, help="IP address")
+parser_add_a.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_add_aaaa = subparsers.add_parser("add_aaaa", help="domain add AAAA record")
 parser_add_aaaa.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_aaaa.add_argument("dns_name", type=str, help="DNS name")
 parser_add_aaaa.add_argument("ipv6_address", type=str, help="IPv6 address")
+parser_add_aaaa.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_add_mx = subparsers.add_parser("add_mx", help="domain add MX record")
 parser_add_mx.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_mx.add_argument("dns_name", type=str, help="DNS name")
 parser_add_mx.add_argument("ms_server", type=str, help="MX server")
 parser_add_mx.add_argument("priority", type=int, help="Priority")
+parser_add_mx.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_add_srv = subparsers.add_parser("add_srv", help="domain add SRV record")
 parser_add_srv.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_srv.add_argument("priority", type=int, help="Priority")
 parser_add_srv.add_argument("host", type=str, help="Host")
+parser_add_srv.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 parser_add_srv.add_argument("srv_priority", type=int, help="SRV priority")
 parser_add_srv.add_argument("weight", type=int, help="Weight")
 parser_add_srv.add_argument("port", type=int, help="Port")
@@ -61,16 +65,19 @@ parser_add_cname = subparsers.add_parser("add_cname", help="domain add CNAME rec
 parser_add_cname.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_cname.add_argument("dns_name", type=str, help="DNS name")
 parser_add_cname.add_argument("sub_domain", type=str, help="Subdomain")
+parser_add_cname.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_add_txt = subparsers.add_parser("add_txt", help="domain add TXT record")
 parser_add_txt.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_txt.add_argument("dns_name", type=str, help="DNS name")
 parser_add_txt.add_argument("txt_record", type=str, help="TXT record")
+parser_add_txt.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_add_ns = subparsers.add_parser("add_ns", help="domain add NS record")
 parser_add_ns.add_argument("domain_id", type=int, help="Domain ID")
 parser_add_ns.add_argument("ns_name", type=str, help="NS name")
 parser_add_ns.add_argument("ns_field", type=str, help="NS field")
+parser_add_ns.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 # Get
 
@@ -84,12 +91,14 @@ parser_edit_a.add_argument("record_id", type=str, help="Record ID")
 parser_edit_a.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_a.add_argument("dns_name", type=str, help="DNS name")
 parser_edit_a.add_argument("ip_address", type=str, help="IP address")
+parser_edit_a.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_edit_aaaa = subparsers.add_parser("edit_aaaa", help="domain edit AAAA record")
 parser_edit_aaaa.add_argument("record_id", type=str, help="Record ID")
 parser_edit_aaaa.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_aaaa.add_argument("dns_name", type=str, help="DNS name")
 parser_edit_aaaa.add_argument("ipv6_address", type=str, help="IPv6 address")
+parser_edit_aaaa.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_edit_mx = subparsers.add_parser("edit_mx", help="domain edit MX record")
 parser_edit_mx.add_argument("record_id", type=str, help="Record ID")
@@ -97,12 +106,14 @@ parser_edit_mx.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_mx.add_argument("dns_name", type=str, help="DNS name")
 parser_edit_mx.add_argument("ms_server", type=str, help="MX server")
 parser_edit_mx.add_argument("priority", type=int, help="Priority")
+parser_edit_mx.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_edit_srv = subparsers.add_parser("edit_srv", help="domain edit SRV record")
 parser_edit_srv.add_argument("record_id", type=str, help="Record ID")
 parser_edit_srv.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_srv.add_argument("priority", type=int, help="Priority")
 parser_edit_srv.add_argument("host", type=str, help="Host")
+parser_edit_srv.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 parser_edit_srv.add_argument("srv_priority", type=int, help="SRV priority")
 parser_edit_srv.add_argument("weight", type=int, help="Weight")
 parser_edit_srv.add_argument("port", type=int, help="Port")
@@ -113,18 +124,21 @@ parser_edit_cname.add_argument("record_id", type=str, help="Record ID")
 parser_edit_cname.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_cname.add_argument("dns_name", type=str, help="DNS name")
 parser_edit_cname.add_argument("sub_domain", type=str, help="Subdomain")
+parser_edit_cname.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_edit_txt = subparsers.add_parser("edit_txt", help="domain edit TXT record")
 parser_edit_txt.add_argument("record_id", type=str, help="Record ID")
 parser_edit_txt.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_txt.add_argument("dns_name", type=str, help="DNS name")
 parser_edit_txt.add_argument("txt_record", type=str, help="TXT record")
+parser_edit_txt.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 parser_edit_ns = subparsers.add_parser("edit_ns", help="domain edit NS record")
 parser_edit_ns.add_argument("record_id", type=str, help="Record ID")
 parser_edit_ns.add_argument("domain_id", type=int, help="Domain ID")
 parser_edit_ns.add_argument("ns_name", type=str, help="NS name")
 parser_edit_ns.add_argument("ns_field", type=str, help="NS field")
+parser_edit_ns.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
 
 # Delete
 
@@ -190,6 +204,7 @@ if args.function == "add_a":
     result = atex.domain_add_record_a(args.domain_id,
                                       args.dns_name,
                                       args.ip_address,
+                                      args.ttl,
                                       login,
                                       password)
     print(result)
@@ -199,6 +214,7 @@ if args.function == "add_aaaa":
     result = atex.domain_add_record_aaaa(args.domain_id,
                                          args.dns_name,
                                          args.ipv6_address,
+                                         args.ttl,
                                          login, password)
     exit(0)
 
@@ -207,6 +223,7 @@ if args.function == "add_mx":
                                        args.dns_name,
                                        args.mx_server,
                                        args.priority,
+                                       args.ttl,
                                        login,
                                        password)
     print(result)
@@ -215,6 +232,7 @@ if args.function == "add_mx":
 if args.function == "add_srv":
     result = atex.domain_add_record_srv(args.domain_id,
                                         args.priority,
+                                        args.ttl,
                                         args.host,
                                         args.srv_priority,
                                         args.weight,
@@ -229,6 +247,7 @@ if args.function == "add_cname":
     result = atex.domain_add_record_cname(args.domain_id,
                                           args.dns_name,
                                           args.sub_domain,
+                                          args.ttl,
                                           login,
                                           password)
     print(result)
@@ -238,6 +257,7 @@ if args.function == "add_txt":
     result = atex.domain_add_record_txt(args.domain_id,
                                         args.dns_name,
                                         args.txt_record,
+                                        args.ttl,
                                         login,
                                         password)
     print(result)
@@ -247,6 +267,7 @@ if args.function == "add_ns":
     result = atex.domain_add_record_ns(args.domain_id,
                                        args.ns_name,
                                        args.ns_field,
+                                       args.ttl,
                                        login,
                                        password)
     print(result)
@@ -264,6 +285,7 @@ if args.function == "edit_a":
                                        args.domain_id,
                                        args.dns_name,
                                        args.ip_address,
+                                       args.ttl,
                                        login,
                                        password)
     print(result)
@@ -274,6 +296,7 @@ if args.function == "edit_aaaa":
                                           args.domain_id,
                                           args.dns_name,
                                           args.ipv6_address,
+                                          args.ttl,
                                           login, password)
     print(result)
     exit(0)
@@ -284,6 +307,7 @@ if args.function == "edit_mx":
                                         args.dns_name,
                                         args.mx_server,
                                         args.priority,
+                                        args.ttl,
                                         login,
                                         password)
     print(result)
@@ -293,6 +317,7 @@ if args.function == "edit_srv":
     result = atex.domain_edit_record_srv(args.record_id,
                                          args.domain_id,
                                          args.priority,
+                                         args.ttl,
                                          args.host,
                                          args.srv_priority,
                                          args.weight,
@@ -308,6 +333,7 @@ if args.function == "edit_cname":
                                            args.domain_id,
                                            args.dns_name,
                                            args.sub_domain,
+                                           args.ttl,
                                            login,
                                            password)
     print(result)
@@ -318,6 +344,7 @@ if args.function == "edit_txt":
                                          args.domain_id,
                                          args.dns_name,
                                          args.txt_record,
+                                         args.ttl,
                                          login,
                                          password)
     print(result)
@@ -328,6 +355,7 @@ if args.function == "edit_ns":
                                         args.domain_id,
                                         args.ns_name,
                                         args.ns_field,
+                                        args.ttl,
                                         login,
                                         password)
     print(result)

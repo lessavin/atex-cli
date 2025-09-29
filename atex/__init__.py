@@ -31,44 +31,49 @@ def domain_list_raw(login: str,
 def domain_add_record_a(domain_id: int,
                         dns_name: str,
                         ip_address: str,
+                        ttl: int,
                         login: str,
                         password: str) -> str:
-    response = requests.get(domain_add_record_a_raw(domain_id, dns_name, ip_address, login, password))
+    response = requests.get(domain_add_record_a_raw(domain_id, dns_name, ip_address, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_a_raw(domain_id: int,
                             dns_name: str,
                             ip_address: str,
+                            ttl: int,
                             login: str,
                             password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=A&dns_name={dns_name}&ipv4={ip_address}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=A&dns_name={dns_name}&ipv4={ip_address}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_aaaa(domain_id: int,
                            dns_name: str,
                            ipv6_address: str,
+                           ttl: int,
                            login: str,
                            password: str) -> str:
-    response = requests.get(domain_add_record_aaaa_raw(domain_id, dns_name, ipv6_address, login, password))
+    response = requests.get(domain_add_record_aaaa_raw(domain_id, dns_name, ipv6_address, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_aaaa_raw(domain_id: int,
                                dns_name: str,
                                ipv6_address: str,
+                               ttl: int,
                                login: str,
                                password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=AAAA&dns_name={dns_name}&ipv6={ipv6_address}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=AAAA&dns_name={dns_name}&ipv6={ipv6_address}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_mx(domain_id: int,
                          dns_name: str,
                          mx_server: str,
                          priority: int,
+                         ttl: int,
                          login: str,
                          password: str) -> str:
-    response = requests.get(domain_add_record_mx_raw(domain_id, dns_name, mx_server, priority, login, password))
+    response = requests.get(domain_add_record_mx_raw(domain_id, dns_name, mx_server, priority, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -76,13 +81,15 @@ def domain_add_record_mx_raw(domain_id: int,
                              dns_name: str,
                              mx_server: str,
                              priority: int,
+                             ttl: int,
                              login: str,
                              password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=MX&dns_name={dns_name}&mx={mx_server}&priority={priority}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=MX&dns_name={dns_name}&mx={mx_server}&priority={priority}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_srv(domain_id: int,
                           priority: int,
+                          ttl: int,
                           host: str,
                           srv_priority: int,
                           weight: int,
@@ -91,12 +98,13 @@ def domain_add_record_srv(domain_id: int,
                           login: str,
                           password: str) -> str:
     response = requests.get(
-        domain_add_record_srv_raw(domain_id, priority, host, srv_priority, weight, port, address, login, password))
+        domain_add_record_srv_raw(domain_id, priority, ttl, host, srv_priority, weight, port, address, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_srv_raw(domain_id: int,
                               priority: int,
+                              ttl: int,
                               host: str,
                               srv_priority: int,
                               weight: int,
@@ -104,58 +112,64 @@ def domain_add_record_srv_raw(domain_id: int,
                               address: str,
                               login: str,
                               password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=SRV&priority={priority}&ttl=3600&dns_name_srv={host}&srv_priority={srv_priority}&weight={weight}&port={port}&address={address}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=SRV&priority={priority}&ttl={ttl}&dns_name_srv={host}&srv_priority={srv_priority}&weight={weight}&port={port}&address={address}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_cname(domain_id: int,
                             dns_name: str,
                             sub_domain: str,
+                            ttl: int,
                             login: str,
                             password: str) -> str:
-    response = requests.get(domain_add_record_cname_raw(domain_id, dns_name, sub_domain, login, password))
+    response = requests.get(domain_add_record_cname_raw(domain_id, dns_name, sub_domain, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_cname_raw(domain_id: int,
                                 dns_name: str,
                                 sub_domain: str,
+                                ttl: int,
                                 login: str,
                                 password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=CNAME&dns_name={dns_name}&canonical_name={sub_domain}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=CNAME&dns_name={dns_name}&canonical_name={sub_domain}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_txt(domain_id: int,
                           dns_name: str,
                           txt_record: str,
+                          ttl: int,
                           login: str,
                           password: str) -> str:
-    response = requests.get(domain_add_record_txt_raw(domain_id, dns_name, txt_record, login, password))
+    response = requests.get(domain_add_record_txt_raw(domain_id, dns_name, txt_record, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_txt_raw(domain_id: int,
                               dns_name: str,
                               txt_record: str,
+                              ttl: int,
                               login: str,
                               password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=TXT&dns_name={dns_name}&txt={txt_record}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=TXT&dns_name={dns_name}&txt={txt_record}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_add_record_ns(domain_id: int,
                          ns_name: str,
                          ns_field: str,
+                         ttl: int,
                          login: str,
                          password: str) -> str:
-    response = requests.get(domain_add_record_ns_raw(domain_id, ns_name, ns_field, login, password))
+    response = requests.get(domain_add_record_ns_raw(domain_id, ns_name, ns_field, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
 def domain_add_record_ns_raw(domain_id: int,
                              ns_name: str,
                              ns_field: str,
+                             ttl: int,
                              login: str,
                              password: str) -> str:
-    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=NS&ns_name={ns_name}&ns_field={ns_field}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=NS&ns_name={ns_name}&ns_field={ns_field}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_get_records(domain_id: int,
@@ -185,9 +199,10 @@ def domain_edit_record_a(record_id: str,
                          domain_id: int,
                          dns_name: str,
                          ip_address: str,
+                         ttl: int,
                          login: str,
                          password: str) -> str:
-    response = requests.get(domain_edit_record_a_raw(record_id, domain_id, dns_name, ip_address, login, password))
+    response = requests.get(domain_edit_record_a_raw(record_id, domain_id, dns_name, ip_address, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -195,18 +210,21 @@ def domain_edit_record_a_raw(record_id: str,
                              domain_id: int,
                              dns_name: str,
                              ip_address: str,
+                             ttl: int,
                              login: str,
                              password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}&plid={domain_id}&func=domain.dnsrecords.edit&out=xml&authinfo={login}:{password}&dns_type=A&dns_name={dns_name}&ipv4={ip_address}&clicked_button=ok&sok=ok&ttl=3600"
+    return f"https://my.atex.ru/billmgr?elid={record_id}&plid={domain_id}&func=domain.dnsrecords.edit&out=xml&authinfo={login}:{password}&dns_type=A&dns_name={dns_name}&ipv4={ip_address}&clicked_button=ok&sok=ok&ttl={ttl}"
 
 
 def domain_edit_record_aaaa(record_id: str,
                             domain_id: int,
                             dns_name: str,
                             ipv6_address: str,
+                            ttl: int,
                             login: str,
                             password: str) -> str:
-    response = requests.get(domain_edit_record_aaaa_raw(record_id, domain_id, dns_name, ipv6_address, login, password))
+    response = requests.get(
+        domain_edit_record_aaaa_raw(record_id, domain_id, dns_name, ipv6_address, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -214,9 +232,10 @@ def domain_edit_record_aaaa_raw(record_id: str,
                                 domain_id: int,
                                 dns_name: str,
                                 ipv6_address: str,
+                                ttl: int,
                                 login: str,
                                 password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=AAAA&dns_name={dns_name}&ipv6={ipv6_address}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=AAAA&dns_name={dns_name}&ipv6={ipv6_address}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_edit_record_mx(record_id: str,
@@ -224,10 +243,11 @@ def domain_edit_record_mx(record_id: str,
                           dns_name: str,
                           mx_server: str,
                           priority: int,
+                          ttl: int,
                           login: str,
                           password: str) -> str:
     response = requests.get(
-        domain_edit_record_mx_raw(record_id, domain_id, dns_name, mx_server, priority, login, password))
+        domain_edit_record_mx_raw(record_id, domain_id, dns_name, mx_server, ttl, priority, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -236,14 +256,16 @@ def domain_edit_record_mx_raw(record_id: str,
                               dns_name: str,
                               mx_server: str,
                               priority: int,
+                              ttl: int,
                               login: str,
                               password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=MX&dns_name={dns_name}&mx={mx_server}&priority={priority}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=MX&dns_name={dns_name}&mx={mx_server}&priority={priority}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_edit_record_srv(record_id: str,
                            domain_id: int,
                            priority: int,
+                           ttl: int,
                            host: str,
                            srv_priority: int,
                            weight: int,
@@ -252,7 +274,8 @@ def domain_edit_record_srv(record_id: str,
                            login: str,
                            password: str) -> str:
     response = requests.get(
-        domain_edit_record_srv_raw(record_id, domain_id, priority, host, srv_priority, weight, port, address, login,
+        domain_edit_record_srv_raw(record_id, domain_id, priority, ttl, host, srv_priority, weight, port, address,
+                                   login,
                                    password))
     return pretty_xml_as_string(response.text)
 
@@ -260,6 +283,7 @@ def domain_edit_record_srv(record_id: str,
 def domain_edit_record_srv_raw(record_id: str,
                                domain_id: int,
                                priority: int,
+                               ttl: int,
                                host: str,
                                srv_priority: int,
                                weight: int,
@@ -267,16 +291,18 @@ def domain_edit_record_srv_raw(record_id: str,
                                address: str,
                                login: str,
                                password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=SRV&priority={priority}&ttl=3600&dns_name_srv={host}&srv_priority={srv_priority}&weight={weight}&port={port}&address={address}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=SRV&priority={priority}&ttl={ttl}&dns_name_srv={host}&srv_priority={srv_priority}&weight={weight}&port={port}&address={address}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_edit_record_cname(record_id: str,
                              domain_id: int,
                              dns_name: str,
                              sub_domain: str,
+                             ttl: int,
                              login: str,
                              password: str) -> str:
-    response = requests.get(domain_edit_record_cname_raw(record_id, domain_id, dns_name, sub_domain, login, password))
+    response = requests.get(
+        domain_edit_record_cname_raw(record_id, domain_id, dns_name, sub_domain, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -284,18 +310,21 @@ def domain_edit_record_cname_raw(record_id: str,
                                  domain_id: int,
                                  dns_name: str,
                                  sub_domain: str,
+                                 ttl: int,
                                  login: str,
                                  password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=CNAME&dns_name={dns_name}&canonical_name={sub_domain}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=CNAME&dns_name={dns_name}&canonical_name={sub_domain}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_edit_record_txt(record_id: str,
                            domain_id: int,
                            dns_name: str,
                            txt_record: str,
+                           ttl: int,
                            login: str,
                            password: str) -> str:
-    response = requests.get(domain_edit_record_txt_raw(record_id, domain_id, dns_name, txt_record, login, password))
+    response = requests.get(
+        domain_edit_record_txt_raw(record_id, domain_id, dns_name, txt_record, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -303,18 +332,20 @@ def domain_edit_record_txt_raw(record_id: str,
                                domain_id: int,
                                dns_name: str,
                                txt_record: str,
+                               ttl: int,
                                login: str,
                                password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=TXT&dns_name={dns_name}&txt={txt_record}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=TXT&dns_name={dns_name}&txt={txt_record}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_edit_record_ns(record_id: str,
                           domain_id: int,
                           ns_name: str,
                           ns_field: str,
+                          ttl: int,
                           login: str,
                           password: str) -> str:
-    response = requests.get(domain_edit_record_ns_raw(record_id, domain_id, ns_name, ns_field, login, password))
+    response = requests.get(domain_edit_record_ns_raw(record_id, domain_id, ns_name, ns_field, ttl, login, password))
     return pretty_xml_as_string(response.text)
 
 
@@ -322,9 +353,10 @@ def domain_edit_record_ns_raw(record_id: str,
                               domain_id: int,
                               ns_name: str,
                               ns_field: str,
+                              ttl: int,
                               login: str,
                               password: str) -> str:
-    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=NS&ns_name={ns_name}&ns_field={ns_field}&ttl=3600&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
+    return f"https://my.atex.ru/billmgr?elid={record_id}?plid={domain_id}&func=domain.dnsrecords.edit&dns_type=NS&ns_name={ns_name}&ns_field={ns_field}&ttl={ttl}&sok=ok&clicked_button=ok&authinfo={login}:{password}&out=xml"
 
 
 def domain_delete_record(record_id: str,
