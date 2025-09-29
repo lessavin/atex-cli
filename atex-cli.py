@@ -49,13 +49,13 @@ parser_add_mx.add_argument("ms_server", type=str, help="MX server")
 parser_add_mx.add_argument("priority", type=int, help="Priority")
 
 parser_add_srv = subparsers.add_parser("add_srv", help="domain add SRV record")
-parser_add_mx.add_argument("domain_id", type=int, help="Domain ID")
-parser_add_mx.add_argument("priority", type=int, help="Priority")
-parser_add_mx.add_argument("host", type=str, help="Host")
-parser_add_mx.add_argument("srv_priority", type=int, help="SRV priority")
-parser_add_mx.add_argument("weight", type=int, help="Weight")
-parser_add_mx.add_argument("port", type=int, help="Port")
-parser_add_mx.add_argument("address", type=str, help="Address")
+parser_add_srv.add_argument("domain_id", type=int, help="Domain ID")
+parser_add_srv.add_argument("priority", type=int, help="Priority")
+parser_add_srv.add_argument("host", type=str, help="Host")
+parser_add_srv.add_argument("srv_priority", type=int, help="SRV priority")
+parser_add_srv.add_argument("weight", type=int, help="Weight")
+parser_add_srv.add_argument("port", type=int, help="Port")
+parser_add_srv.add_argument("address", type=str, help="Address")
 
 parser_add_cname = subparsers.add_parser("add_cname", help="domain add CNAME record")
 parser_add_cname.add_argument("domain_id", type=int, help="Domain ID")
@@ -68,9 +68,9 @@ parser_add_txt.add_argument("dns_name", type=str, help="DNS name")
 parser_add_txt.add_argument("txt_record", type=str, help="TXT record")
 
 parser_add_ns = subparsers.add_parser("add_ns", help="domain add NS record")
-parser_add_txt.add_argument("domain_id", type=int, help="Domain ID")
-parser_add_txt.add_argument("ns_name", type=str, help="NS name")
-parser_add_txt.add_argument("ns_field", type=str, help="NS field")
+parser_add_ns.add_argument("domain_id", type=int, help="Domain ID")
+parser_add_ns.add_argument("ns_name", type=str, help="NS name")
+parser_add_ns.add_argument("ns_field", type=str, help="NS field")
 
 # Get
 
