@@ -220,6 +220,7 @@ if args.function == "add":
         result = atex.domain_add_record_a(args.domain_id,
                                           args.dns_name,
                                           args.ip_address,
+                                          3600,
                                           login,
                                           password)
         print(result)
@@ -229,6 +230,7 @@ if args.function == "add":
         result = atex.domain_add_record_aaaa(args.domain_id,
                                              args.dns_name,
                                              args.ipv6_address,
+                                             3600,
                                              login,
                                              password)
         print(result)
@@ -239,6 +241,7 @@ if args.function == "add":
                                             args.dns_name,
                                             args.mx_server,
                                             args.priority,
+                                            3600,
                                             login,
                                             password)
          print(result)
@@ -247,6 +250,7 @@ if args.function == "add":
     if args.add == "srv":
          result = atex.domain_add_record_srv(args.domain_id,
                                              args.priority,
+                                             3600,
                                              args.host,
                                              args.srv_priority,
                                              args.weight,
@@ -261,6 +265,7 @@ if args.function == "add":
          result = atex.domain_add_record_cname(args.domain_id,
                                                args.dns_name,
                                                args.sub_domain,
+                                               3600,
                                                login,
                                                password)
          print(result)
@@ -270,6 +275,7 @@ if args.function == "add":
          result = atex.domain_add_record_txt(args.domain_id,
                                              args.dns_name,
                                              args.txt_record,
+                                             3600,
                                              login,
                                              password)
          print(result)
@@ -279,6 +285,7 @@ if args.function == "add":
          result = atex.domain_add_record_ns(args.domain_id,
                                             args.ns_name,
                                             args.ns_field,
+                                            3600,
                                             login,
                                             password)
          print(result)
@@ -299,6 +306,7 @@ if args.function == "edit":
                                            args.domain_id,
                                            args.dns_name,
                                            args.ip_address,
+                                           3600,
                                            login,
                                            password)
         print(result)
@@ -309,6 +317,7 @@ if args.function == "edit":
                                               args.domain_id,
                                               args.dns_name,
                                               args.ipv6_address,
+                                              3600,
                                               login,
                                               password)
         print(result)
@@ -320,6 +329,7 @@ if args.function == "edit":
                                             args.dns_name,
                                             args.mx_server,
                                             args.priority,
+                                            3600,
                                             login,
                                             password)
         print(result)
@@ -329,6 +339,7 @@ if args.function == "edit":
         result = atex.domain_edit_record_srv(args.record_id,
                                              args.domain_id,
                                              args.priority,
+                                             3600,
                                              args.host,
                                              args.srv_priority,
                                              args.weight,
@@ -344,6 +355,7 @@ if args.function == "edit":
                                                args.domain_id,
                                                args.dns_name,
                                                args.sub_domain,
+                                               3600,
                                                login,
                                                password)
         print(result)
@@ -354,6 +366,7 @@ if args.function == "edit":
                                              args.domain_id,
                                              args.dns_name,
                                              args.txt_record,
+                                             3600,
                                              login,
                                              password)
         print(result)
@@ -364,6 +377,7 @@ if args.function == "edit":
                                             args.domain_id,
                                             args.ns_name,
                                             args.ns_field,
+                                            3600,
                                             login,
                                             password)
         print(result)
