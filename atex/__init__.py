@@ -439,7 +439,7 @@ class Atex:
         return response
 
     def get(self,
-            domain_id: int) -> list[Any]:
+            domain_id: int):
         response = GetAtexRequest(authinfo=self.authinfo,
                                   elid=domain_id).send()
         root = ElementTree.fromstring(response)
