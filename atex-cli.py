@@ -220,8 +220,10 @@ if not (login and password):
     print("Login or password is missing or can't be accessed.")
     exit(1)
 
+atex = atex.Atex(login, password)
+
 if args.function == "list":
-    result = tabulate(atex.domain_list(login, password),
+    result = tabulate(atex.domain_list(),
                       headers=["Id", "Domain name", "Tariff plan", "End date", "DNS", "Status", "Price"],
                       tablefmt="plain")
     print(result)
@@ -234,9 +236,7 @@ if args.function == "add":
         result = atex.domain_add_record_a(args.domain_id,
                                           args.dns_name,
                                           args.ip_address,
-                                          args.ttl,
-                                          login,
-                                          password)
+                                          args.ttl)
         print(result)
         exit(0)
 
@@ -244,9 +244,7 @@ if args.function == "add":
         result = atex.domain_add_record_aaaa(args.domain_id,
                                              args.dns_name,
                                              args.ipv6_address,
-                                             args.ttl,
-                                             login,
-                                             password)
+                                             args.ttl)
         print(result)
         exit(0)
 
@@ -255,9 +253,7 @@ if args.function == "add":
                                             args.dns_name,
                                             args.mx_server,
                                             args.priority,
-                                            args.ttl,
-                                            login,
-                                            password)
+                                            args.ttl)
          print(result)
          exit(0)
 
@@ -269,9 +265,7 @@ if args.function == "add":
                                              args.srv_priority,
                                              args.weight,
                                              args.port,
-                                             args.address,
-                                             login,
-                                             password)
+                                             args.address)
          print(result)
          exit(0)
 
@@ -279,9 +273,7 @@ if args.function == "add":
          result = atex.domain_add_record_cname(args.domain_id,
                                                args.dns_name,
                                                args.sub_domain,
-                                               args.ttl,
-                                               login,
-                                               password)
+                                               args.ttl)
          print(result)
          exit(0)
 
@@ -289,9 +281,7 @@ if args.function == "add":
          result = atex.domain_add_record_txt(args.domain_id,
                                              args.dns_name,
                                              args.txt_record,
-                                             args.ttl,
-                                             login,
-                                             password)
+                                             args.ttl)
          print(result)
          exit(0)
 
@@ -299,14 +289,12 @@ if args.function == "add":
          result = atex.domain_add_record_ns(args.domain_id,
                                             args.ns_name,
                                             args.ns_field,
-                                            args.ttl,
-                                            login,
-                                            password)
+                                            args.ttl)
          print(result)
          exit(0)
 
 if args.function == "get":
-    result = tabulate(atex.domain_get_records(args.domain_id, login, password),
+    result = tabulate(atex.domain_get_records(args.domain_id),
                       headers=["ID", "Host", "TTL", "Record type", "Content"],
                       tablefmt="plain")
     print(result)
@@ -320,9 +308,7 @@ if args.function == "edit":
                                            args.domain_id,
                                            args.dns_name,
                                            args.ip_address,
-                                           args.ttl,
-                                           login,
-                                           password)
+                                           args.ttl)
         print(result)
         exit(0)
 
@@ -331,9 +317,7 @@ if args.function == "edit":
                                               args.domain_id,
                                               args.dns_name,
                                               args.ipv6_address,
-                                              args.ttl,
-                                              login,
-                                              password)
+                                              args.ttl)
         print(result)
         exit(0)
 
@@ -343,9 +327,7 @@ if args.function == "edit":
                                             args.dns_name,
                                             args.mx_server,
                                             args.priority,
-                                            args.ttl,
-                                            login,
-                                            password)
+                                            args.ttl)
         print(result)
         exit(0)
 
@@ -358,9 +340,7 @@ if args.function == "edit":
                                              args.srv_priority,
                                              args.weight,
                                              args.port,
-                                             args.address,
-                                             login,
-                                             password)
+                                             args.address)
         print(result)
         exit(0)
 
@@ -369,9 +349,7 @@ if args.function == "edit":
                                                args.domain_id,
                                                args.dns_name,
                                                args.sub_domain,
-                                               args.ttl,
-                                               login,
-                                               password)
+                                               args.ttl)
         print(result)
         exit(0)
 
@@ -380,9 +358,7 @@ if args.function == "edit":
                                              args.domain_id,
                                              args.dns_name,
                                              args.txt_record,
-                                             args.ttl,
-                                             login,
-                                             password)
+                                             args.ttl)
         print(result)
         exit(0)
 
@@ -391,40 +367,30 @@ if args.function == "edit":
                                             args.domain_id,
                                             args.ns_name,
                                             args.ns_field,
-                                            args.ttl,
-                                            login,
-                                            password)
+                                            args.ttl)
         print(result)
         exit(0)
 
 if args.function == "delete":
     result = atex.domain_delete_record(args.record_id,
-                                       args.domain_id,
-                                       login,
-                                       password)
+                                       args.domain_id)
     print(result)
     exit(0)
 
 if args.function == "dns":
-    result = atex.dns_auto_settings(args.domain_id,
-                                    login,
-                                    password)
+    result = atex.dns_auto_settings(args.domain_id)
     print(result)
     exit(0)
 
 if args.function == "dnssec":
-    result = atex.dnssec_get(args.domain_id,
-                             login,
-                             password)
+    result = atex.dnssec_get(args.domain_id)
     print(result)
     exit(0)
 
 if args.function == "dnssec_enable":
     result = atex.dnssec_enable(args.domain_id,
                                 args.dns_to_add,
-                                args.ds_to_add,
-                                login,
-                                password)
+                                args.ds_to_add)
     print(result)
     exit(0)
 
@@ -436,9 +402,7 @@ if args.function == "soa":
                            args.retry,
                            args.expire,
                            args.minimum,
-                           args.ttl,
-                           login,
-                           password)
+                           args.ttl)
     print(result)
     exit(0)
 
