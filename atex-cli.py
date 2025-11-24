@@ -233,68 +233,68 @@ if args.function == "add":
     result = "dns_type not found."
 
     if args.add == "a":
-        result = atex.domain_add_record_a(args.domain_id,
-                                          args.dns_name,
-                                          args.ip_address,
-                                          args.ttl)
+        result = atex.add_a(args.domain_id,
+                            args.dns_name,
+                            args.ip_address,
+                            args.ttl)
         print(result)
         exit(0)
 
     if args.add == "aaaa":
-        result = atex.domain_add_record_aaaa(args.domain_id,
-                                             args.dns_name,
-                                             args.ipv6_address,
-                                             args.ttl)
+        result = atex.add_aaaa(args.domain_id,
+                               args.dns_name,
+                               args.ipv6_address,
+                               args.ttl)
         print(result)
         exit(0)
 
     if args.add == "mx":
-         result = atex.domain_add_record_mx(args.domain_id,
-                                            args.dns_name,
-                                            args.mx_server,
-                                            args.priority,
-                                            args.ttl)
-         print(result)
-         exit(0)
+        result = atex.add_mx(args.domain_id,
+                             args.dns_name,
+                             args.mx_server,
+                             args.priority,
+                             args.ttl)
+        print(result)
+        exit(0)
 
     if args.add == "srv":
-         result = atex.domain_add_record_srv(args.domain_id,
-                                             args.priority,
-                                             args.ttl,
-                                             args.host,
-                                             args.srv_priority,
-                                             args.weight,
-                                             args.port,
-                                             args.address)
-         print(result)
-         exit(0)
+        result = atex.add_srv(args.domain_id,
+                              args.priority,
+                              args.ttl,
+                              args.host,
+                              args.srv_priority,
+                              args.weight,
+                              args.port,
+                              args.address)
+        print(result)
+        exit(0)
 
     if args.add == "cname":
-         result = atex.domain_add_record_cname(args.domain_id,
-                                               args.dns_name,
-                                               args.sub_domain,
-                                               args.ttl)
-         print(result)
-         exit(0)
+        result = atex.add_cname(args.domain_id,
+                                args.dns_name,
+                                args.sub_domain,
+                                args.ttl)
+        print(result)
+        exit(0)
 
     if args.add == "txt":
-         result = atex.domain_add_record_txt(args.domain_id,
-                                             args.dns_name,
-                                             args.txt_record,
-                                             args.ttl)
-         print(result)
-         exit(0)
+        result = atex.add_txt(args.domain_id,
+                              args.dns_name,
+                              args.txt_record,
+                              args.ttl)
+        print(result)
+        exit(0)
 
     if args.add == "ns":
-         result = atex.domain_add_record_ns(args.domain_id,
-                                            args.ns_name,
-                                            args.ns_field,
-                                            args.ttl)
-         print(result)
-         exit(0)
+        result = atex.add_ns(args.domain_id,
+                             args.ns_name,
+                             args.ns_field,
+                             args.ttl)
+        print(result)
+        exit(0)
 
 if args.function == "get":
-    result = tabulate(atex.domain_get_records(args.domain_id),
+    result = tabulate(atex.get(args.domain_id),
                       headers=["ID", "Host", "TTL", "Record type", "Content"],
                       tablefmt="plain")
     print(result)
@@ -304,86 +304,86 @@ if args.function == "edit":
     result = "dns_type not found."
 
     if args.edit == "a":
-        result = atex.domain_edit_record_a(args.record_id,
-                                           args.domain_id,
-                                           args.dns_name,
-                                           args.ip_address,
-                                           args.ttl)
+        result = atex.edit_a(args.record_id,
+                             args.domain_id,
+                             args.dns_name,
+                             args.ip_address,
+                             args.ttl)
         print(result)
         exit(0)
 
     if args.edit == "aaaa":
-        result = atex.domain_edit_record_aaaa(args.record_id,
-                                              args.domain_id,
-                                              args.dns_name,
-                                              args.ipv6_address,
-                                              args.ttl)
+        result = atex.edit_aaaa(args.record_id,
+                                args.domain_id,
+                                args.dns_name,
+                                args.ipv6_address,
+                                args.ttl)
         print(result)
         exit(0)
 
     if args.edit == "mx":
-        result = atex.domain_edit_record_mx(args.record_id,
-                                            args.domain_id,
-                                            args.dns_name,
-                                            args.mx_server,
-                                            args.priority,
-                                            args.ttl)
+        result = atex.edit_mx(args.record_id,
+                              args.domain_id,
+                              args.dns_name,
+                              args.mx_server,
+                              args.priority,
+                              args.ttl)
         print(result)
         exit(0)
 
     if args.edit == "srv":
-        result = atex.domain_edit_record_srv(args.record_id,
-                                             args.domain_id,
-                                             args.priority,
-                                             args.ttl,
-                                             args.host,
-                                             args.srv_priority,
-                                             args.weight,
-                                             args.port,
-                                             args.address)
+        result = atex.edit_srv(args.record_id,
+                               args.domain_id,
+                               args.priority,
+                               args.ttl,
+                               args.host,
+                               args.srv_priority,
+                               args.weight,
+                               args.port,
+                               args.address)
         print(result)
         exit(0)
 
     if args.edit == "cname":
-        result = atex.domain_edit_record_cname(args.record_id,
-                                               args.domain_id,
-                                               args.dns_name,
-                                               args.sub_domain,
-                                               args.ttl)
+        result = atex.edit_cname(args.record_id,
+                                 args.domain_id,
+                                 args.dns_name,
+                                 args.sub_domain,
+                                 args.ttl)
         print(result)
         exit(0)
 
     if args.edit == "txt":
-        result = atex.domain_edit_record_txt(args.record_id,
-                                             args.domain_id,
-                                             args.dns_name,
-                                             args.txt_record,
-                                             args.ttl)
+        result = atex.edit_txt(args.record_id,
+                               args.domain_id,
+                               args.dns_name,
+                               args.txt_record,
+                               args.ttl)
         print(result)
         exit(0)
 
     if args.edit == "ns":
-        result = atex.domain_edit_record_ns(args.record_id,
-                                            args.domain_id,
-                                            args.ns_name,
-                                            args.ns_field,
-                                            args.ttl)
+        result = atex.edit_ns(args.record_id,
+                              args.domain_id,
+                              args.ns_name,
+                              args.ns_field,
+                              args.ttl)
         print(result)
         exit(0)
 
 if args.function == "delete":
-    result = atex.domain_delete_record(args.record_id,
-                                       args.domain_id)
+    result = atex.delete(args.record_id,
+                         args.domain_id)
     print(result)
     exit(0)
 
 if args.function == "dns":
-    result = atex.dns_auto_settings(args.domain_id)
+    result = atex.auto(args.domain_id)
     print(result)
     exit(0)
 
 if args.function == "dnssec":
-    result = atex.dnssec_get(args.domain_id)
+    result = atex.dnssec(args.domain_id)
     print(result)
     exit(0)
 
