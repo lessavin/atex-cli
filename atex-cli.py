@@ -175,7 +175,7 @@ delete_function_p.add_argument("domain_id", type=int, help="Domain ID")
 
 # DNS
 
-dns_function_p = subparsers.add_parser('dns', help='DNS auto settings')
+dns_function_p = subparsers.add_parser('auto', help='DNS auto settings')
 dns_function_p.add_argument("domain_id", type=int, help="Domain ID")
 
 # DNSSEC
@@ -377,7 +377,7 @@ if args.function == "delete":
     print(result)
     exit(0)
 
-if args.function == "dns":
+if args.function == "auto":
     result = atex.auto(args.domain_id)
     print(result)
     exit(0)
