@@ -246,10 +246,6 @@ class Atex:
 
         return table
 
-    def list_raw(self) -> str:
-        response = ListAtexRequest(self.authinfo).raw()
-        return response
-
     def add_a(self,
               domain_id: int,
               dns_name: str,
@@ -262,18 +258,6 @@ class Atex:
                                       ipv4=ip_address).send()
         return pretty_xml_as_string(response)
 
-    def add_a_raw(self,
-                  domain_id: int,
-                  dns_name: str,
-                  ip_address: str,
-                  ttl: int) -> str:
-        response = ARecordAtexRequest(authinfo=self.authinfo,
-                                      plid=domain_id,
-                                      ttl=ttl,
-                                      dns_name=dns_name,
-                                      ipv4=ip_address).raw()
-        return response
-
     def add_aaaa(self,
                  domain_id: int,
                  dns_name: str,
@@ -285,18 +269,6 @@ class Atex:
                                          dns_name=dns_name,
                                          ipv6=ipv6_address).send()
         return pretty_xml_as_string(response)
-
-    def add_aaaa_raw(self,
-                     domain_id: int,
-                     dns_name: str,
-                     ipv6_address: str,
-                     ttl: int) -> str:
-        response = AAAARecordAtexRequest(authinfo=self.authinfo,
-                                         plid=domain_id,
-                                         ttl=ttl,
-                                         dns_name=dns_name,
-                                         ipv6=ipv6_address).raw()
-        return response
 
     def add_mx(self,
                domain_id: int,
@@ -311,20 +283,6 @@ class Atex:
                                        mx=mx_server,
                                        priority=priority).send()
         return pretty_xml_as_string(response)
-
-    def add_mx_raw(self,
-                   domain_id: int,
-                   dns_name: str,
-                   mx_server: str,
-                   priority: int,
-                   ttl: int) -> str:
-        response = MXRecordAtexRequest(authinfo=self.authinfo,
-                                       plid=domain_id,
-                                       ttl=ttl,
-                                       dns_name=dns_name,
-                                       mx=mx_server,
-                                       priority=priority).raw()
-        return response
 
     def add_srv(self,
                 domain_id: int,
@@ -346,26 +304,6 @@ class Atex:
                                         weight=weight).send()
         return pretty_xml_as_string(response)
 
-    def add_srv_raw(self,
-                    domain_id: int,
-                    priority: int,
-                    ttl: int,
-                    host: str,
-                    srv_priority: int,
-                    weight: int,
-                    port: int,
-                    address: str) -> str:
-        response = SRVRecordAtexRequest(authinfo=self.authinfo,
-                                        plid=domain_id,
-                                        ttl=ttl,
-                                        host=host,
-                                        address=address,
-                                        port=port,
-                                        priority=priority,
-                                        srv_priority=srv_priority,
-                                        weight=weight).raw()
-        return response
-
     def add_cname(self,
                   domain_id: int,
                   dns_name: str,
@@ -377,18 +315,6 @@ class Atex:
                                           canonical_name=sub_domain,
                                           dns_name=dns_name).send()
         return pretty_xml_as_string(response)
-
-    def add_cname_raw(self,
-                      domain_id: int,
-                      dns_name: str,
-                      sub_domain: str,
-                      ttl: int) -> str:
-        response = CNAMERecordAtexRequest(authinfo=self.authinfo,
-                                          plid=domain_id,
-                                          ttl=ttl,
-                                          canonical_name=sub_domain,
-                                          dns_name=dns_name).raw()
-        return response
 
     def add_txt(self,
                 domain_id: int,
@@ -402,18 +328,6 @@ class Atex:
                                         txt=txt_record).send()
         return pretty_xml_as_string(response)
 
-    def add_txt_raw(self,
-                    domain_id: int,
-                    dns_name: str,
-                    txt_record: str,
-                    ttl: int) -> str:
-        response = TXTRecordAtexRequest(authinfo=self.authinfo,
-                                        plid=domain_id,
-                                        ttl=ttl,
-                                        dns_name=dns_name,
-                                        txt=txt_record).raw()
-        return response
-
     def add_ns(self,
                domain_id: int,
                ns_name: str,
@@ -425,18 +339,6 @@ class Atex:
                                        ns_field=ns_field,
                                        ns_name=ns_name).send()
         return pretty_xml_as_string(response)
-
-    def add_ns_raw(self,
-                   domain_id: int,
-                   ns_name: str,
-                   ns_field: str,
-                   ttl: int) -> str:
-        response = NSRecordAtexRequest(authinfo=self.authinfo,
-                                       plid=domain_id,
-                                       ttl=ttl,
-                                       ns_field=ns_field,
-                                       ns_name=ns_name).raw()
-        return response
 
     def get(self,
             domain_id: int):
@@ -454,12 +356,6 @@ class Atex:
 
         return table
 
-    def get_raw(self,
-                domain_id: int) -> str:
-        response = GetAtexRequest(authinfo=self.authinfo,
-                                  elid=domain_id).raw()
-        return response
-
     def edit_a(self,
                record_id: str,
                domain_id: int,
@@ -474,20 +370,6 @@ class Atex:
                                           elid=record_id).send()
         return pretty_xml_as_string(response)
 
-    def edit_a_raw(self,
-                   record_id: str,
-                   domain_id: int,
-                   dns_name: str,
-                   ip_address: str,
-                   ttl: int) -> str:
-        response = EditARecordAtexRequest(authinfo=self.authinfo,
-                                          plid=domain_id,
-                                          ttl=ttl,
-                                          dns_name=dns_name,
-                                          ipv4=ip_address,
-                                          elid=record_id).raw()
-        return response
-
     def edit_aaaa(self,
                   record_id: str,
                   domain_id: int,
@@ -501,20 +383,6 @@ class Atex:
                                              ipv6=ipv6_address,
                                              elid=record_id).send()
         return pretty_xml_as_string(response)
-
-    def edit_aaaa_raw(self,
-                      record_id: str,
-                      domain_id: int,
-                      dns_name: str,
-                      ipv6_address: str,
-                      ttl: int) -> str:
-        response = EditAAAARecordAtexRequest(authinfo=self.authinfo,
-                                             plid=domain_id,
-                                             ttl=ttl,
-                                             dns_name=dns_name,
-                                             ipv6=ipv6_address,
-                                             elid=record_id).raw()
-        return response
 
     def edit_mx(self,
                 record_id: str,
@@ -531,22 +399,6 @@ class Atex:
                                            priority=priority,
                                            elid=record_id).send()
         return pretty_xml_as_string(response)
-
-    def edit_mx_raw(self,
-                    record_id: str,
-                    domain_id: int,
-                    dns_name: str,
-                    mx_server: str,
-                    priority: int,
-                    ttl: int) -> str:
-        response = EditMXRecordAtexRequest(authinfo=self.authinfo,
-                                           plid=domain_id,
-                                           ttl=ttl,
-                                           dns_name=dns_name,
-                                           mx=mx_server,
-                                           priority=priority,
-                                           elid=record_id).raw()
-        return response
 
     def edit_srv(self,
                  record_id: str,
@@ -570,28 +422,6 @@ class Atex:
                                             elid=record_id).send()
         return pretty_xml_as_string(response)
 
-    def edit_srv_raw(self,
-                     record_id: str,
-                     domain_id: int,
-                     priority: int,
-                     ttl: int,
-                     host: str,
-                     srv_priority: int,
-                     weight: int,
-                     port: int,
-                     address: str) -> str:
-        response = EditSRVRecordAtexRequest(authinfo=self.authinfo,
-                                            plid=domain_id,
-                                            ttl=ttl,
-                                            host=host,
-                                            address=address,
-                                            port=port,
-                                            priority=priority,
-                                            srv_priority=srv_priority,
-                                            weight=weight,
-                                            elid=record_id).raw()
-        return response
-
     def edit_cname(self,
                    record_id: str,
                    domain_id: int,
@@ -604,19 +434,6 @@ class Atex:
                                               canonical_name=sub_domain,
                                               dns_name=dns_name, elid=record_id).send()
         return pretty_xml_as_string(response)
-
-    def edit_cname_raw(self,
-                       record_id: str,
-                       domain_id: int,
-                       dns_name: str,
-                       sub_domain: str,
-                       ttl: int) -> str:
-        response = EditCNAMERecordAtexRequest(authinfo=self.authinfo,
-                                              plid=domain_id,
-                                              ttl=ttl,
-                                              canonical_name=sub_domain,
-                                              dns_name=dns_name, elid=record_id).raw()
-        return response
 
     def edit_txt(self,
                  record_id: str,
@@ -632,20 +449,6 @@ class Atex:
                                             elid=record_id).send()
         return pretty_xml_as_string(response)
 
-    def edit_txt_raw(self,
-                     record_id: str,
-                     domain_id: int,
-                     dns_name: str,
-                     txt_record: str,
-                     ttl: int) -> str:
-        response = EditTXTRecordAtexRequest(authinfo=self.authinfo,
-                                            plid=domain_id,
-                                            ttl=ttl,
-                                            dns_name=dns_name,
-                                            txt=txt_record,
-                                            elid=record_id).raw()
-        return response
-
     def edit_ns(self,
                 record_id: str,
                 domain_id: int,
@@ -660,20 +463,6 @@ class Atex:
                                            elid=record_id).send()
         return pretty_xml_as_string(response)
 
-    def edit_ns_raw(self,
-                    record_id: str,
-                    domain_id: int,
-                    ns_name: str,
-                    ns_field: str,
-                    ttl: int) -> str:
-        response = EditNSRecordAtexRequest(authinfo=self.authinfo,
-                                           plid=domain_id,
-                                           ttl=ttl,
-                                           ns_field=ns_field,
-                                           ns_name=ns_name,
-                                           elid=record_id).raw()
-        return response
-
     def delete(self,
                record_id: str,
                domain_id: int) -> str:
@@ -682,37 +471,17 @@ class Atex:
                                      plid=domain_id).send()
         return pretty_xml_as_string(response)
 
-    def delete_raw(self,
-                   record_id: str,
-                   domain_id: int) -> str:
-        response = DeleteAtexRequest(authinfo=self.authinfo,
-                                     elid=record_id,
-                                     plid=domain_id).raw()
-        return response
-
     def auto(self,
              domain_id: int) -> str:
         response = AutoAtexRequest(authinfo=self.authinfo,
                                    elid=domain_id).send()
         return pretty_xml_as_string(response)
 
-    def auto_raw(self,
-                 domain_id: int) -> str:
-        response = AutoAtexRequest(authinfo=self.authinfo,
-                                   elid=domain_id).raw()
-        return response
-
     def dnssec(self,
                domain_id: int) -> str:
         response = DnssecAtexRequest(authinfo=self.authinfo,
                                      elid=domain_id).send()
         return pretty_xml_as_string(response)
-
-    def dnssec_raw(self,
-                   domain_id: int) -> str:
-        response = DnssecAtexRequest(authinfo=self.authinfo,
-                                     elid=domain_id).raw()
-        return response
 
     def dnssec_enable(self,
                       domain_id: int,
@@ -723,16 +492,6 @@ class Atex:
                                            ds_to_add=ds_to_add,
                                            plid=domain_id).send()
         return pretty_xml_as_string(response)
-
-    def dnssec_enable_raw(self,
-                          domain_id: int,
-                          dns_to_add: str,
-                          ds_to_add: str) -> str:
-        response = DnssecEnableAtexRequest(authinfo=self.authinfo,
-                                           dns_to_add=dns_to_add,
-                                           ds_to_add=ds_to_add,
-                                           plid=domain_id).raw()
-        return response
 
     def soa(self,
             domain_id: int,
@@ -753,26 +512,6 @@ class Atex:
                                         refresh=refresh,
                                         retry=retry).send()
         return pretty_xml_as_string(response)
-
-    def soa_edit_raw(self,
-                     domain_id: int,
-                     dns_name: str,
-                     email: str,
-                     refresh: bool,
-                     retry: int,
-                     expire: int,
-                     minimum: int,
-                     ttl: int) -> str:
-        response = SOARecordAtexRequest(authinfo=self.authinfo,
-                                        ttl=ttl,
-                                        dns_name=dns_name,
-                                        elid=domain_id,
-                                        email=email,
-                                        expire=expire,
-                                        minimum=minimum,
-                                        refresh=refresh,
-                                        retry=retry).raw()
-        return response
 
 
 # Make XML string prettier.
