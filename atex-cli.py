@@ -223,7 +223,7 @@ if not (login and password):
 atex = atex.Atex(f"{login}:{password}")
 
 if args.function == "list":
-    result = tabulate(atex.domain_list(),
+    result = tabulate(atex.list(),
                       headers=["Id", "Domain name", "Tariff plan", "End date", "DNS", "Status", "Price"],
                       tablefmt="plain")
     print(result)
