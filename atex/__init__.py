@@ -227,12 +227,11 @@ class Atex:
     Otherwise, you can use other request classes to make your own.
     """
 
-    def __init__(self, login, password):
-        self.login = login
-        self.password = password
+    def __init__(self, authinfo):
+        self.authinfo = authinfo
 
     def domain_list(self) -> list[Any]:
-        response = ListAtexRequest(f"{self.login}:{self.password}").send()
+        response = ListAtexRequest(self.authinfo).send()
         root = ElementTree.fromstring(response)
         table = []
 
@@ -248,7 +247,7 @@ class Atex:
         return table
 
     def domain_list_raw(self) -> str:
-        response = ListAtexRequest(f"{self.login}:{self.password}").raw()
+        response = ListAtexRequest(self.authinfo).raw()
         return response
 
     def domain_add_record_a(self,
@@ -256,7 +255,7 @@ class Atex:
                             dns_name: str,
                             ip_address: str,
                             ttl: int) -> str:
-        response = ARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = ARecordAtexRequest(authinfo=self.authinfo,
                                       plid=domain_id,
                                       ttl=ttl,
                                       dns_name=dns_name,
@@ -268,7 +267,7 @@ class Atex:
                                 dns_name: str,
                                 ip_address: str,
                                 ttl: int) -> str:
-        response = ARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = ARecordAtexRequest(authinfo=self.authinfo,
                                       plid=domain_id,
                                       ttl=ttl,
                                       dns_name=dns_name,
@@ -280,7 +279,7 @@ class Atex:
                                dns_name: str,
                                ipv6_address: str,
                                ttl: int) -> str:
-        response = AAAARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = AAAARecordAtexRequest(authinfo=self.authinfo,
                                          plid=domain_id,
                                          ttl=ttl,
                                          dns_name=dns_name,
@@ -292,7 +291,7 @@ class Atex:
                                    dns_name: str,
                                    ipv6_address: str,
                                    ttl: int) -> str:
-        response = AAAARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = AAAARecordAtexRequest(authinfo=self.authinfo,
                                          plid=domain_id,
                                          ttl=ttl,
                                          dns_name=dns_name,
@@ -305,7 +304,7 @@ class Atex:
                              mx_server: str,
                              priority: int,
                              ttl: int) -> str:
-        response = MXRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = MXRecordAtexRequest(authinfo=self.authinfo,
                                        plid=domain_id,
                                        ttl=ttl,
                                        dns_name=dns_name,
@@ -319,7 +318,7 @@ class Atex:
                                  mx_server: str,
                                  priority: int,
                                  ttl: int) -> str:
-        response = MXRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = MXRecordAtexRequest(authinfo=self.authinfo,
                                        plid=domain_id,
                                        ttl=ttl,
                                        dns_name=dns_name,
@@ -336,7 +335,7 @@ class Atex:
                               weight: int,
                               port: int,
                               address: str) -> str:
-        response = SRVRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = SRVRecordAtexRequest(authinfo=self.authinfo,
                                         plid=domain_id,
                                         ttl=ttl,
                                         host=host,
@@ -356,7 +355,7 @@ class Atex:
                                   weight: int,
                                   port: int,
                                   address: str) -> str:
-        response = SRVRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = SRVRecordAtexRequest(authinfo=self.authinfo,
                                         plid=domain_id,
                                         ttl=ttl,
                                         host=host,
@@ -372,7 +371,7 @@ class Atex:
                                 dns_name: str,
                                 sub_domain: str,
                                 ttl: int) -> str:
-        response = CNAMERecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = CNAMERecordAtexRequest(authinfo=self.authinfo,
                                           plid=domain_id,
                                           ttl=ttl,
                                           canonical_name=sub_domain,
@@ -384,7 +383,7 @@ class Atex:
                                     dns_name: str,
                                     sub_domain: str,
                                     ttl: int) -> str:
-        response = CNAMERecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = CNAMERecordAtexRequest(authinfo=self.authinfo,
                                           plid=domain_id,
                                           ttl=ttl,
                                           canonical_name=sub_domain,
@@ -396,7 +395,7 @@ class Atex:
                               dns_name: str,
                               txt_record: str,
                               ttl: int) -> str:
-        response = TXTRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = TXTRecordAtexRequest(authinfo=self.authinfo,
                                         plid=domain_id,
                                         ttl=ttl,
                                         dns_name=dns_name,
@@ -408,7 +407,7 @@ class Atex:
                                   dns_name: str,
                                   txt_record: str,
                                   ttl: int) -> str:
-        response = TXTRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = TXTRecordAtexRequest(authinfo=self.authinfo,
                                         plid=domain_id,
                                         ttl=ttl,
                                         dns_name=dns_name,
@@ -420,7 +419,7 @@ class Atex:
                              ns_name: str,
                              ns_field: str,
                              ttl: int) -> str:
-        response = NSRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = NSRecordAtexRequest(authinfo=self.authinfo,
                                        plid=domain_id,
                                        ttl=ttl,
                                        ns_field=ns_field,
@@ -432,7 +431,7 @@ class Atex:
                                  ns_name: str,
                                  ns_field: str,
                                  ttl: int) -> str:
-        response = NSRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = NSRecordAtexRequest(authinfo=self.authinfo,
                                        plid=domain_id,
                                        ttl=ttl,
                                        ns_field=ns_field,
@@ -441,7 +440,7 @@ class Atex:
 
     def domain_get_records(self,
                            domain_id: int) -> list[Any]:
-        response = GetAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = GetAtexRequest(authinfo=self.authinfo,
                                   elid=domain_id).send()
         root = ElementTree.fromstring(response)
         table = []
@@ -457,7 +456,7 @@ class Atex:
 
     def domain_get_records_raw(self,
                                domain_id: int) -> str:
-        response = GetAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = GetAtexRequest(authinfo=self.authinfo,
                                   elid=domain_id).raw()
         return response
 
@@ -467,7 +466,7 @@ class Atex:
                              dns_name: str,
                              ip_address: str,
                              ttl: int) -> str:
-        response = EditARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditARecordAtexRequest(authinfo=self.authinfo,
                                           plid=domain_id,
                                           ttl=ttl,
                                           dns_name=dns_name,
@@ -481,7 +480,7 @@ class Atex:
                                  dns_name: str,
                                  ip_address: str,
                                  ttl: int) -> str:
-        response = EditARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditARecordAtexRequest(authinfo=self.authinfo,
                                           plid=domain_id,
                                           ttl=ttl,
                                           dns_name=dns_name,
@@ -495,7 +494,7 @@ class Atex:
                                 dns_name: str,
                                 ipv6_address: str,
                                 ttl: int) -> str:
-        response = EditAAAARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditAAAARecordAtexRequest(authinfo=self.authinfo,
                                              plid=domain_id,
                                              ttl=ttl,
                                              dns_name=dns_name,
@@ -509,7 +508,7 @@ class Atex:
                                     dns_name: str,
                                     ipv6_address: str,
                                     ttl: int) -> str:
-        response = EditAAAARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditAAAARecordAtexRequest(authinfo=self.authinfo,
                                              plid=domain_id,
                                              ttl=ttl,
                                              dns_name=dns_name,
@@ -524,7 +523,7 @@ class Atex:
                               mx_server: str,
                               priority: int,
                               ttl: int) -> str:
-        response = EditMXRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditMXRecordAtexRequest(authinfo=self.authinfo,
                                            plid=domain_id,
                                            ttl=ttl,
                                            dns_name=dns_name,
@@ -540,7 +539,7 @@ class Atex:
                                   mx_server: str,
                                   priority: int,
                                   ttl: int) -> str:
-        response = EditMXRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditMXRecordAtexRequest(authinfo=self.authinfo,
                                            plid=domain_id,
                                            ttl=ttl,
                                            dns_name=dns_name,
@@ -559,7 +558,7 @@ class Atex:
                                weight: int,
                                port: int,
                                address: str) -> str:
-        response = EditSRVRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditSRVRecordAtexRequest(authinfo=self.authinfo,
                                             plid=domain_id,
                                             ttl=ttl,
                                             host=host,
@@ -581,7 +580,7 @@ class Atex:
                                    weight: int,
                                    port: int,
                                    address: str) -> str:
-        response = EditSRVRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditSRVRecordAtexRequest(authinfo=self.authinfo,
                                             plid=domain_id,
                                             ttl=ttl,
                                             host=host,
@@ -599,7 +598,7 @@ class Atex:
                                  dns_name: str,
                                  sub_domain: str,
                                  ttl: int) -> str:
-        response = EditCNAMERecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditCNAMERecordAtexRequest(authinfo=self.authinfo,
                                               plid=domain_id,
                                               ttl=ttl,
                                               canonical_name=sub_domain,
@@ -612,7 +611,7 @@ class Atex:
                                      dns_name: str,
                                      sub_domain: str,
                                      ttl: int) -> str:
-        response = EditCNAMERecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditCNAMERecordAtexRequest(authinfo=self.authinfo,
                                               plid=domain_id,
                                               ttl=ttl,
                                               canonical_name=sub_domain,
@@ -625,7 +624,7 @@ class Atex:
                                dns_name: str,
                                txt_record: str,
                                ttl: int) -> str:
-        response = EditTXTRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditTXTRecordAtexRequest(authinfo=self.authinfo,
                                             plid=domain_id,
                                             ttl=ttl,
                                             dns_name=dns_name,
@@ -639,7 +638,7 @@ class Atex:
                                    dns_name: str,
                                    txt_record: str,
                                    ttl: int) -> str:
-        response = EditTXTRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditTXTRecordAtexRequest(authinfo=self.authinfo,
                                             plid=domain_id,
                                             ttl=ttl,
                                             dns_name=dns_name,
@@ -653,7 +652,7 @@ class Atex:
                               ns_name: str,
                               ns_field: str,
                               ttl: int) -> str:
-        response = EditNSRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditNSRecordAtexRequest(authinfo=self.authinfo,
                                            plid=domain_id,
                                            ttl=ttl,
                                            ns_field=ns_field,
@@ -667,7 +666,7 @@ class Atex:
                                   ns_name: str,
                                   ns_field: str,
                                   ttl: int) -> str:
-        response = EditNSRecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = EditNSRecordAtexRequest(authinfo=self.authinfo,
                                            plid=domain_id,
                                            ttl=ttl,
                                            ns_field=ns_field,
@@ -678,7 +677,7 @@ class Atex:
     def domain_delete_record(self,
                              record_id: str,
                              domain_id: int) -> str:
-        response = DeleteAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DeleteAtexRequest(authinfo=self.authinfo,
                                      elid=record_id,
                                      plid=domain_id).send()
         return pretty_xml_as_string(response)
@@ -686,32 +685,32 @@ class Atex:
     def domain_delete_record_raw(self,
                                  record_id: str,
                                  domain_id: int) -> str:
-        response = DeleteAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DeleteAtexRequest(authinfo=self.authinfo,
                                      elid=record_id,
                                      plid=domain_id).raw()
         return response
 
     def dns_auto_settings(self,
                           domain_id: int) -> str:
-        response = AutoAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = AutoAtexRequest(authinfo=self.authinfo,
                                    elid=domain_id).send()
         return pretty_xml_as_string(response)
 
     def dns_auto_settings_raw(self,
                               domain_id: int) -> str:
-        response = AutoAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = AutoAtexRequest(authinfo=self.authinfo,
                                    elid=domain_id).raw()
         return response
 
     def dnssec_get(self,
                    domain_id: int) -> str:
-        response = DnssecAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DnssecAtexRequest(authinfo=self.authinfo,
                                      elid=domain_id).send()
         return pretty_xml_as_string(response)
 
     def dnssec_get_raw(self,
                        domain_id: int) -> str:
-        response = DnssecAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DnssecAtexRequest(authinfo=self.authinfo,
                                      elid=domain_id).raw()
         return response
 
@@ -719,7 +718,7 @@ class Atex:
                       domain_id: int,
                       dns_to_add: str,
                       ds_to_add: str) -> str:
-        response = DnssecEnableAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DnssecEnableAtexRequest(authinfo=self.authinfo,
                                            dns_to_add=dns_to_add,
                                            ds_to_add=ds_to_add,
                                            plid=domain_id).send()
@@ -729,7 +728,7 @@ class Atex:
                           domain_id: int,
                           dns_to_add: str,
                           ds_to_add: str) -> str:
-        response = DnssecEnableAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = DnssecEnableAtexRequest(authinfo=self.authinfo,
                                            dns_to_add=dns_to_add,
                                            ds_to_add=ds_to_add,
                                            plid=domain_id).raw()
@@ -744,7 +743,7 @@ class Atex:
                  expire: int,
                  minimum: int,
                  ttl: int) -> str:
-        response = SOARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = SOARecordAtexRequest(authinfo=self.authinfo,
                                         ttl=ttl,
                                         dns_name=dns_name,
                                         elid=domain_id,
@@ -764,7 +763,7 @@ class Atex:
                      expire: int,
                      minimum: int,
                      ttl: int) -> str:
-        response = SOARecordAtexRequest(authinfo=f"{self.login}:{self.password}",
+        response = SOARecordAtexRequest(authinfo=self.authinfo,
                                         ttl=ttl,
                                         dns_name=dns_name,
                                         elid=domain_id,

@@ -220,7 +220,7 @@ if not (login and password):
     print("Login or password is missing or can't be accessed.")
     exit(1)
 
-atex = atex.Atex(login, password)
+atex = atex.Atex(f"{login}:{password}")
 
 if args.function == "list":
     result = tabulate(atex.domain_list(),
