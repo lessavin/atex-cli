@@ -230,8 +230,8 @@ if args.function == "list":
     exit(0)
 
 if args.function == "add":
-    result = "dns_type not found."
-
+    result = add_function_p.format_help()
+    
     if args.add == "a":
         result = atex.add_a(args.domain_id,
                             args.dns_name,
@@ -301,8 +301,8 @@ if args.function == "get":
     exit(0)
 
 if args.function == "edit":
-    result = "dns_type not found."
-
+    result = edit_function_p.format_help()
+    
     if args.edit == "a":
         result = atex.edit_a(args.record_id,
                              args.domain_id,
@@ -406,4 +406,7 @@ if args.function == "soa":
     print(result)
     exit(0)
 
-parser.print_help()
+if result == None:
+    result = parser.format_help()
+
+print(result)
