@@ -203,9 +203,7 @@ soa_function_p.add_argument("minimum", type=int, help="Minimum")
 soa_function_p.add_argument("ttl", type=int, help="TTL")
 
 args = parser.parse_args()
-
-if args.function is None:
-    parser.print_help()
+result = parser.format_help()
 
 # Setup authinfo
 login = args.login
@@ -405,8 +403,5 @@ if args.function == "soa":
                            args.ttl)
     print(result)
     exit(0)
-
-if result == None:
-    result = parser.format_help()
 
 print(result)
