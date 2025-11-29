@@ -110,6 +110,7 @@ edit_function_sp = edit_function_p.add_subparsers(help='Method to perform', dest
 
 a_edit_function_p = edit_function_sp.add_parser('a', help='domain edit A record')
 a_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+a_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 a_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
 a_edit_function_p.add_argument("ip_address", type=str, help="IP address")
 a_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
@@ -118,6 +119,7 @@ a_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, de
 
 aaaa_edit_function_p = edit_function_sp.add_parser('aaaa', help='domain edit AAAA record')
 aaaa_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+aaaa_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 aaaa_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
 aaaa_edit_function_p.add_argument("ipv6_address", type=str, help="IPv6 address")
 aaaa_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
@@ -126,6 +128,7 @@ aaaa_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False,
 
 mx_edit_function_p = edit_function_sp.add_parser('mx', help='domain edit MX record')
 mx_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+mx_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 mx_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
 mx_edit_function_p.add_argument("ms_server", type=str, help="MX server")
 mx_edit_function_p.add_argument("priority", type=int, help="Priority")
@@ -135,6 +138,7 @@ mx_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, d
 
 srv_edit_function_p = edit_function_sp.add_parser('srv', help='domain edit SRV record')
 srv_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+srv_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 srv_edit_function_p.add_argument("priority", type=int, help="Priority")
 srv_edit_function_p.add_argument("host", type=str, help="Host")
 srv_edit_function_p.add_argument("srv_priority", type=int, help="SRV priority")
@@ -147,6 +151,7 @@ srv_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, 
 
 cname_edit_function_p = edit_function_sp.add_parser('cname', help='domain edit CNAME record')
 cname_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+cname_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 cname_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
 cname_edit_function_p.add_argument("sub_domain", type=str, help="Subdomain")
 cname_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
@@ -155,6 +160,7 @@ cname_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False
 
 txt_edit_function_p = edit_function_sp.add_parser('txt', help='domain edit TXT record')
 txt_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+txt_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 txt_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
 txt_edit_function_p.add_argument("txt_record", type=str, help="TXT record")
 txt_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
@@ -163,6 +169,7 @@ txt_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, 
 
 ns_edit_function_p = edit_function_sp.add_parser('ns', help='domain edit NS record')
 ns_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+ns_edit_function_p.add_argument("record_id", type=str, help="Record ID")
 ns_edit_function_p.add_argument("ns_name", type=str, help="NS name")
 ns_edit_function_p.add_argument("ns_field", type=str, help="NS field")
 ns_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
@@ -170,8 +177,8 @@ ns_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, d
 # Delete
 
 delete_function_p = subparsers.add_parser('delete', help='domain delete record')
-delete_function_p.add_argument("record_id", type=str, help="Record ID")
 delete_function_p.add_argument("domain_id", type=int, help="Domain ID")
+delete_function_p.add_argument("record_id", type=str, help="Record ID")
 
 # DNS
 
