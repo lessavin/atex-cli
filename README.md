@@ -5,9 +5,9 @@ atex-cli - [Atex.ru](https://atex.ru/) command line tools.
 ## Synopsis
 
 atex-cli list  
-atex-cli add
-atex-cli get
-atex-cli edit 
+atex-cli add  
+atex-cli get  
+atex-cli edit  
 atex-cli auto  
 atex-cli dnssec  
 atex-cli dnssec-enable  
