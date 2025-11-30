@@ -37,7 +37,7 @@ classifiers = [
 Repository = "https://codeberg.org/lessavin/atex-cli.git"
 
 [project.scripts]
-atex-cli = "atex:run_cli"
+atex-cli = "atexcli:run_cli"
 
 [build-system]
 requires = ["setuptools >= 80.9.0"]

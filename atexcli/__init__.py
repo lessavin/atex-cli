@@ -1,9 +1,8 @@
-from atex import request
-
 def run_cli():
     import argparse
     import os
     from tabulate import tabulate
+    from atexcli import atex
 
     parser = argparse.ArgumentParser(
         prog='atex-cli',
@@ -225,7 +224,7 @@ def run_cli():
         print("Login or password is missing or can't be accessed.")
         exit(1)
 
-    atex = request.Atex(f"{login}:{password}")
+    atex = atex.Atex(f"{login}:{password}")
 
     if args.function == "list":
         result = tabulate(atex.list(),
