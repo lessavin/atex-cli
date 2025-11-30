@@ -215,11 +215,11 @@ def run_cli():
     # Setup authinfo
     login = args.login
     if login is None:
-        login = os.environ.setdefault("ATEX_LOGIN", "")
+        login = os.getenv("ATEX_LOGIN", "")
 
     password = args.password
     if password is None:
-        password = os.environ.setdefault("ATEX_PASSWORD", "")
+        password = os.getenv("ATEX_PASSWORD", "")
 
     if not (login and password):
         print("Login or password is missing or can't be accessed.")
