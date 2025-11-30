@@ -1,521 +1,414 @@
-import urllib.parse
-import urllib.request
-import xml.dom.minidom
-from typing import Any
-from xml.etree import ElementTree
+from atex import request
+
+def run_cli():
+    import argparse
+    import os
+    from tabulate import tabulate
 
+    parser = argparse.ArgumentParser(
+        prog='atex-cli',
+        description='Atex.ru command line tools.',
+        epilog='Report bugs to lessavin@hotmail.com.')
 
-class AtexRequest(dict):
-    """
-    Represents a general Atex request, inheriting from dict to allow dictionary-like access.
-    """
+    # Login argument
+    parser.add_argument('--login',
+                        help='atex login',
+                        type=str,
+                        required=False,
+                        default=None)
 
-    def __init__(self, authinfo, func):
-        super().__init__()  # Initialize the dict base class
+    # Password argument
+    parser.add_argument('--password',
+                        help='atex password',
+                        type=str,
+                        required=False,
+                        default=None)
+
+    subparsers = parser.add_subparsers(dest="function")
 
-        self["authinfo"] = authinfo
-        self["func"] = func
-        self["out"] = "xml"
+    # List
 
-    def raw(self) -> str:
-        return "https://my.atex.ru/billmgr?" + urllib.parse.urlencode(self)
+    list_function_p = subparsers.add_parser('list', help='domain(s) list')
 
-    def send(self) -> str:
-        with urllib.request.urlopen(self.raw()) as response:
-            data = response.read()
+    # Add
+
+    add_function_p = subparsers.add_parser('add', help='domain add record')
+    add_function_sp = add_function_p.add_subparsers(help='Method to perform', dest='add')
 
-            encoding = response.headers.get_content_charset()
+    # Add A
 
-            if encoding is None:
-                encoding = "utf-8"
+    a_add_function_p = add_function_sp.add_parser('a', help='domain add A record')
+    a_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    a_add_function_p.add_argument("dns_name", type=str, help="DNS name")
+    a_add_function_p.add_argument("ip_address", type=str, help="IP address")
+    a_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add AAAA
+
+    aaaa_add_function_p = add_function_sp.add_parser('aaaa', help='domain add AAAA record')
+    aaaa_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    aaaa_add_function_p.add_argument("dns_name", type=str, help="DNS name")
+    aaaa_add_function_p.add_argument("ipv6_address", type=str, help="IPv6 address")
+    aaaa_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add MX
+
+    mx_add_function_p = add_function_sp.add_parser('mx', help='domain add MX record')
+    mx_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    mx_add_function_p.add_argument("dns_name", type=str, help="DNS name")
+    mx_add_function_p.add_argument("ms_server", type=str, help="MX server")
+    mx_add_function_p.add_argument("priority", type=int, help="Priority")
+    mx_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add SRV
+
+    srv_add_function_p = add_function_sp.add_parser('srv', help='domain add SRV record')
+    srv_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    srv_add_function_p.add_argument("priority", type=int, help="Priority")
+    srv_add_function_p.add_argument("host", type=str, help="Host")
+    srv_add_function_p.add_argument("srv_priority", type=int, help="SRV priority")
+    srv_add_function_p.add_argument("weight", type=int, help="Weight")
+    srv_add_function_p.add_argument("port", type=int, help="Port")
+    srv_add_function_p.add_argument("address", type=str, help="Address")
+    srv_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add CNAME
+
+    cname_add_function_p = add_function_sp.add_parser('cname', help='domain add CNAME record')
+    cname_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    cname_add_function_p.add_argument("dns_name", type=str, help="DNS name")
+    cname_add_function_p.add_argument("sub_domain", type=str, help="Subdomain")
+    cname_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add TXT
+
+    txt_add_function_p = add_function_sp.add_parser('txt', help='domain add TXT record')
+    txt_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    txt_add_function_p.add_argument("dns_name", type=str, help="DNS name")
+    txt_add_function_p.add_argument("txt_record", type=str, help="TXT record")
+    txt_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Add NS
+
+    ns_add_function_p = add_function_sp.add_parser('ns', help='domain add NS record')
+    ns_add_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    ns_add_function_p.add_argument("ns_name", type=str, help="NS name")
+    ns_add_function_p.add_argument("ns_field", type=str, help="NS field")
+    ns_add_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Get
 
-            result = data.decode(encoding)
-        return result
+    get_function_p = subparsers.add_parser('get', help='domain get records')
+    get_function_p.add_argument("domain_id", type=int, help="Domain ID")
 
+    # Edit
 
-class ListAtexRequest(AtexRequest):
-    def __init__(self, authinfo):
-        super().__init__(authinfo, "domain")
-
-
-class RecordAtexRequest(AtexRequest):
-    """
-    Represents a DNS record Atex request.
-    """
-
-    def __init__(self, authinfo, func, dns_type, plid, ttl):
-        super().__init__(authinfo, func)
-
-        self["clicked_button"] = "ok"
-        self["dns_type"] = dns_type
-        self["plid"] = plid
-        self["sok"] = "ok"
-        self["ttl"] = ttl
-
-
-class ARecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, ipv4):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "A", plid, ttl)
-
-        self["dns_name"] = dns_name
-        self["ipv4"] = ipv4
-
-
-class EditARecordAtexRequest(ARecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, ipv4, elid):
-        super().__init__(authinfo, plid, ttl, dns_name, ipv4)
-
-        self["elid"] = elid
-
-
-class AAAARecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, ipv6):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "AAAA", plid, ttl)
-
-        self["dns_name"] = dns_name
-        self["ipv6"] = ipv6
-
-
-class EditAAAARecordAtexRequest(AAAARecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, ipv6, elid):
-        super().__init__(authinfo, plid, ttl, dns_name, ipv6)
-
-        self["elid"] = elid
-
-
-class MXRecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, mx, priority):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "MX", plid, ttl)
-
-        self["dns_name"] = dns_name
-        self["mx"] = mx
-        self["priority"] = priority
-
-
-class EditMXRecordAtexRequest(MXRecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, mx, priority, elid):
-        super().__init__(authinfo, plid, ttl, dns_name, mx, priority)
-
-        self["elid"] = elid
-
-
-class SRVRecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, address, port, priority, host, srv_priority, weight):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "SRV", plid, ttl)
-
-        self["address"] = address
-        self["port"] = port
-        self["priority"] = priority
-        self["host"] = host
-        self["srv_priority"] = srv_priority
-        self["weight"] = weight
-
-
-class EditSRVRecordAtexRequest(SRVRecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, address, port, priority, host, srv_priority, weight, elid):
-        super().__init__(authinfo, plid, ttl, address, port, priority, host, srv_priority, weight)
-
-        self["elid"] = elid
-
-
-class CNAMERecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, canonical_name, dns_name):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "CNAME", plid, ttl)
-
-        self["canonical_name"] = canonical_name
-        self["dns_name"] = dns_name
-
-
-class EditCNAMERecordAtexRequest(CNAMERecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, canonical_name, dns_name, elid):
-        super().__init__(authinfo, plid, ttl, canonical_name, dns_name)
-
-        self["elid"] = elid
-
-
-class TXTRecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, txt):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "TXT", plid, ttl)
-
-        self["dns_name"] = dns_name
-        self["txt"] = txt
-
-
-class EditTXTRecordAtexRequest(TXTRecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, dns_name, txt, elid):
-        super().__init__(authinfo, plid, ttl, dns_name, txt)
-
-        self["elid"] = elid
-
-
-class NSRecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, ns_field, ns_name):
-        super().__init__(authinfo, "domain.dnsrecords.edit", "NS", plid, ttl)
-
-        self["ns_field"] = ns_field
-        self["ns_name"] = ns_name
-
-
-class EditNSRecordAtexRequest(NSRecordAtexRequest):
-    def __init__(self, authinfo, plid, ttl, ns_field, ns_name, elid):
-        super().__init__(authinfo, plid, ttl, ns_field, ns_name)
-
-        self["elid"] = elid
-
-
-class GetAtexRequest(AtexRequest):
-    def __init__(self, authinfo, elid):
-        super().__init__(authinfo, "domain.dnsrecords")
-
-        self["elid"] = elid
-
-
-class DeleteAtexRequest(AtexRequest):
-    def __init__(self, authinfo, elid, plid):
-        super().__init__(authinfo, "domain.dnsrecords.delete")
-
-        self["clicked_button"] = "ok"
-        self["elid"] = elid
-        self["plid"] = plid
-        self["sok"] = "ok"
-
-
-class AutoAtexRequest(AtexRequest):
-    def __init__(self, authinfo, elid):
-        super().__init__(authinfo, "domain.dnsrecords.autoconfigns")
-
-        self["clicked_button"] = "ok"
-        self["elid"] = elid
-        self["sok"] = "ok"
-
-
-class DnssecAtexRequest(AtexRequest):
-    def __init__(self, authinfo, elid):
-        super().__init__(authinfo, "domain.dnsrecords.dnssec")
-
-        self["elid"] = elid
-
-
-class DnssecEnableAtexRequest(AtexRequest):
-    def __init__(self, authinfo, dns_to_add, ds_to_add, plid):
-        super().__init__(authinfo, "domain.dnsrecords.dnssec")
-
-        self["clicked_button"] = "ok"
-        self["dns_to_add"] = dns_to_add
-        self["ds_to_add"] = ds_to_add
-        self["plid"] = plid
-        self["sok"] = "ok"
-
-
-class SOARecordAtexRequest(RecordAtexRequest):
-    def __init__(self, authinfo, ttl, dns_name, elid, email, expire, minimum, refresh, retry):
-        super().__init__(authinfo, "domain.dnsrecords.editsoa", "SOA", "", ttl)
-
-        self["dns_name"] = dns_name
-        self["elid"] = elid
-        self["email"] = email
-        self["expire"] = expire
-        self["minimum"] = minimum
-        self["refresh"] = refresh
-        self["retry"] = retry
-
-
-class Atex:
-    """
-    Atex class.
-    Use this to make all requests to Atex API.
-    Otherwise, you can use other request classes to make your own.
-    """
-
-    def __init__(self, authinfo):
-        self.authinfo = authinfo
-
-    def list(self) -> list[Any]:
-        response = ListAtexRequest(self.authinfo).send()
-        root = ElementTree.fromstring(response)
-        table = []
-
-        for elem in root.findall("./elem"):
-            table.append([elem.find("id").text,
-                          elem.find("domain").text,
-                          elem.find("pricelist").text,
-                          elem.find("expiredate").text,
-                          elem.find("nslist").text,
-                          elem.find("status").text,
-                          elem.find("cost").text])
-
-        return table
-
-    def add_a(self,
-              domain_id: int,
-              dns_name: str,
-              ip_address: str,
-              ttl: int) -> str:
-        response = ARecordAtexRequest(authinfo=self.authinfo,
-                                      plid=domain_id,
-                                      ttl=ttl,
-                                      dns_name=dns_name,
-                                      ipv4=ip_address).send()
-        return pretty_xml_as_string(response)
-
-    def add_aaaa(self,
-                 domain_id: int,
-                 dns_name: str,
-                 ipv6_address: str,
-                 ttl: int) -> str:
-        response = AAAARecordAtexRequest(authinfo=self.authinfo,
-                                         plid=domain_id,
-                                         ttl=ttl,
-                                         dns_name=dns_name,
-                                         ipv6=ipv6_address).send()
-        return pretty_xml_as_string(response)
-
-    def add_mx(self,
-               domain_id: int,
-               dns_name: str,
-               mx_server: str,
-               priority: int,
-               ttl: int) -> str:
-        response = MXRecordAtexRequest(authinfo=self.authinfo,
-                                       plid=domain_id,
-                                       ttl=ttl,
-                                       dns_name=dns_name,
-                                       mx=mx_server,
-                                       priority=priority).send()
-        return pretty_xml_as_string(response)
-
-    def add_srv(self,
-                domain_id: int,
-                priority: int,
-                ttl: int,
-                host: str,
-                srv_priority: int,
-                weight: int,
-                port: int,
-                address: str) -> str:
-        response = SRVRecordAtexRequest(authinfo=self.authinfo,
-                                        plid=domain_id,
-                                        ttl=ttl,
-                                        host=host,
-                                        address=address,
-                                        port=port,
-                                        priority=priority,
-                                        srv_priority=srv_priority,
-                                        weight=weight).send()
-        return pretty_xml_as_string(response)
-
-    def add_cname(self,
-                  domain_id: int,
-                  dns_name: str,
-                  sub_domain: str,
-                  ttl: int) -> str:
-        response = CNAMERecordAtexRequest(authinfo=self.authinfo,
-                                          plid=domain_id,
-                                          ttl=ttl,
-                                          canonical_name=sub_domain,
-                                          dns_name=dns_name).send()
-        return pretty_xml_as_string(response)
-
-    def add_txt(self,
-                domain_id: int,
-                dns_name: str,
-                txt_record: str,
-                ttl: int) -> str:
-        response = TXTRecordAtexRequest(authinfo=self.authinfo,
-                                        plid=domain_id,
-                                        ttl=ttl,
-                                        dns_name=dns_name,
-                                        txt=txt_record).send()
-        return pretty_xml_as_string(response)
-
-    def add_ns(self,
-               domain_id: int,
-               ns_name: str,
-               ns_field: str,
-               ttl: int) -> str:
-        response = NSRecordAtexRequest(authinfo=self.authinfo,
-                                       plid=domain_id,
-                                       ttl=ttl,
-                                       ns_field=ns_field,
-                                       ns_name=ns_name).send()
-        return pretty_xml_as_string(response)
-
-    def get(self,
-            domain_id: int):
-        response = GetAtexRequest(authinfo=self.authinfo,
-                                  elid=domain_id).send()
-        root = ElementTree.fromstring(response)
-        table = []
-
-        for elem in root.findall("./elem"):
-            table.append([elem.find("dns_id").text,
-                          elem.find("dns_name").text,
-                          elem.find("dns_ttl").text,
-                          elem.find("dns_type").text,
-                          elem.find("dns_content").text])
-
-        return table
-
-    def edit_a(self,
-               record_id: str,
-               domain_id: int,
-               dns_name: str,
-               ip_address: str,
-               ttl: int) -> str:
-        response = EditARecordAtexRequest(authinfo=self.authinfo,
-                                          plid=domain_id,
-                                          ttl=ttl,
-                                          dns_name=dns_name,
-                                          ipv4=ip_address,
-                                          elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_aaaa(self,
-                  record_id: str,
-                  domain_id: int,
-                  dns_name: str,
-                  ipv6_address: str,
-                  ttl: int) -> str:
-        response = EditAAAARecordAtexRequest(authinfo=self.authinfo,
-                                             plid=domain_id,
-                                             ttl=ttl,
-                                             dns_name=dns_name,
-                                             ipv6=ipv6_address,
-                                             elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_mx(self,
-                record_id: str,
-                domain_id: int,
-                dns_name: str,
-                mx_server: str,
-                priority: int,
-                ttl: int) -> str:
-        response = EditMXRecordAtexRequest(authinfo=self.authinfo,
-                                           plid=domain_id,
-                                           ttl=ttl,
-                                           dns_name=dns_name,
-                                           mx=mx_server,
-                                           priority=priority,
-                                           elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_srv(self,
-                 record_id: str,
-                 domain_id: int,
-                 priority: int,
-                 ttl: int,
-                 host: str,
-                 srv_priority: int,
-                 weight: int,
-                 port: int,
-                 address: str) -> str:
-        response = EditSRVRecordAtexRequest(authinfo=self.authinfo,
-                                            plid=domain_id,
-                                            ttl=ttl,
-                                            host=host,
-                                            address=address,
-                                            port=port,
-                                            priority=priority,
-                                            srv_priority=srv_priority,
-                                            weight=weight,
-                                            elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_cname(self,
-                   record_id: str,
-                   domain_id: int,
-                   dns_name: str,
-                   sub_domain: str,
-                   ttl: int) -> str:
-        response = EditCNAMERecordAtexRequest(authinfo=self.authinfo,
-                                              plid=domain_id,
-                                              ttl=ttl,
-                                              canonical_name=sub_domain,
-                                              dns_name=dns_name, elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_txt(self,
-                 record_id: str,
-                 domain_id: int,
-                 dns_name: str,
-                 txt_record: str,
-                 ttl: int) -> str:
-        response = EditTXTRecordAtexRequest(authinfo=self.authinfo,
-                                            plid=domain_id,
-                                            ttl=ttl,
-                                            dns_name=dns_name,
-                                            txt=txt_record,
-                                            elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def edit_ns(self,
-                record_id: str,
-                domain_id: int,
-                ns_name: str,
-                ns_field: str,
-                ttl: int) -> str:
-        response = EditNSRecordAtexRequest(authinfo=self.authinfo,
-                                           plid=domain_id,
-                                           ttl=ttl,
-                                           ns_field=ns_field,
-                                           ns_name=ns_name,
-                                           elid=record_id).send()
-        return pretty_xml_as_string(response)
-
-    def delete(self,
-               record_id: str,
-               domain_id: int) -> str:
-        response = DeleteAtexRequest(authinfo=self.authinfo,
-                                     elid=record_id,
-                                     plid=domain_id).send()
-        return pretty_xml_as_string(response)
-
-    def auto(self,
-             domain_id: int) -> str:
-        response = AutoAtexRequest(authinfo=self.authinfo,
-                                   elid=domain_id).send()
-        return pretty_xml_as_string(response)
-
-    def dnssec(self,
-               domain_id: int) -> str:
-        response = DnssecAtexRequest(authinfo=self.authinfo,
-                                     elid=domain_id).send()
-        return pretty_xml_as_string(response)
-
-    def dnssec_enable(self,
-                      domain_id: int,
-                      dns_to_add: str,
-                      ds_to_add: str) -> str:
-        response = DnssecEnableAtexRequest(authinfo=self.authinfo,
-                                           dns_to_add=dns_to_add,
-                                           ds_to_add=ds_to_add,
-                                           plid=domain_id).send()
-        return pretty_xml_as_string(response)
-
-    def soa(self,
-            domain_id: int,
-            dns_name: str,
-            email: str,
-            refresh: bool,
-            retry: int,
-            expire: int,
-            minimum: int,
-            ttl: int) -> str:
-        response = SOARecordAtexRequest(authinfo=self.authinfo,
-                                        ttl=ttl,
-                                        dns_name=dns_name,
-                                        elid=domain_id,
-                                        email=email,
-                                        expire=expire,
-                                        minimum=minimum,
-                                        refresh=refresh,
-                                        retry=retry).send()
-        return pretty_xml_as_string(response)
-
-
-# Make XML string prettier.
-# Source: https://stackoverflow.com/a/1206856
-def pretty_xml_as_string(xml_string: str) -> str:
-    dom = xml.dom.minidom.parseString(xml_string)
-    return dom.toprettyxml()
+    edit_function_p = subparsers.add_parser('edit', help='domain edit record')
+    edit_function_sp = edit_function_p.add_subparsers(help='Method to perform', dest='edit')
+
+    # Edit A
+
+    a_edit_function_p = edit_function_sp.add_parser('a', help='domain edit A record')
+    a_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    a_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    a_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
+    a_edit_function_p.add_argument("ip_address", type=str, help="IP address")
+    a_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit AAAA
+
+    aaaa_edit_function_p = edit_function_sp.add_parser('aaaa', help='domain edit AAAA record')
+    aaaa_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    aaaa_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    aaaa_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
+    aaaa_edit_function_p.add_argument("ipv6_address", type=str, help="IPv6 address")
+    aaaa_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit MX
+
+    mx_edit_function_p = edit_function_sp.add_parser('mx', help='domain edit MX record')
+    mx_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    mx_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    mx_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
+    mx_edit_function_p.add_argument("ms_server", type=str, help="MX server")
+    mx_edit_function_p.add_argument("priority", type=int, help="Priority")
+    mx_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit SRV
+
+    srv_edit_function_p = edit_function_sp.add_parser('srv', help='domain edit SRV record')
+    srv_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    srv_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    srv_edit_function_p.add_argument("priority", type=int, help="Priority")
+    srv_edit_function_p.add_argument("host", type=str, help="Host")
+    srv_edit_function_p.add_argument("srv_priority", type=int, help="SRV priority")
+    srv_edit_function_p.add_argument("weight", type=int, help="Weight")
+    srv_edit_function_p.add_argument("port", type=int, help="Port")
+    srv_edit_function_p.add_argument("address", type=str, help="Address")
+    srv_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit CNAME
+
+    cname_edit_function_p = edit_function_sp.add_parser('cname', help='domain edit CNAME record')
+    cname_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    cname_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    cname_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
+    cname_edit_function_p.add_argument("sub_domain", type=str, help="Subdomain")
+    cname_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit TXT
+
+    txt_edit_function_p = edit_function_sp.add_parser('txt', help='domain edit TXT record')
+    txt_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    txt_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    txt_edit_function_p.add_argument("dns_name", type=str, help="DNS name")
+    txt_edit_function_p.add_argument("txt_record", type=str, help="TXT record")
+    txt_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Edit NS
+
+    ns_edit_function_p = edit_function_sp.add_parser('ns', help='domain edit NS record')
+    ns_edit_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    ns_edit_function_p.add_argument("record_id", type=str, help="Record ID")
+    ns_edit_function_p.add_argument("ns_name", type=str, help="NS name")
+    ns_edit_function_p.add_argument("ns_field", type=str, help="NS field")
+    ns_edit_function_p.add_argument("--ttl", type=int, help="TTL", required=False, default=3600)
+
+    # Delete
+
+    delete_function_p = subparsers.add_parser('delete', help='domain delete record')
+    delete_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    delete_function_p.add_argument("record_id", type=str, help="Record ID")
+
+    # DNS
+
+    dns_function_p = subparsers.add_parser('auto', help='DNS auto settings')
+    dns_function_p.add_argument("domain_id", type=int, help="Domain ID")
+
+    # DNSSEC
+
+    dnssec_function_p = subparsers.add_parser('dnssec', help='get DNSSEC key')
+    dnssec_function_p.add_argument("domain_id", type=int, help="Domain ID")
+
+    # DNSSEC enable
+
+    dnssec_enable_function_p = subparsers.add_parser('dnssec-enable', help='DNSSEC enable')
+    dnssec_enable_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    dnssec_enable_function_p.add_argument("dns_to_add", type=str, help="DNS to add")
+    dnssec_enable_function_p.add_argument("ds_to_add", type=str, help="DS to add")
+
+    # SOA
+
+    soa_function_p = subparsers.add_parser('soa', help='edit SOA')
+    soa_function_p.add_argument("domain_id", type=int, help="Domain ID")
+    soa_function_p.add_argument("dns_name", type=str, help="DNS name")
+    soa_function_p.add_argument("email", type=str, help="Email")
+    soa_function_p.add_argument("refresh", type=bool, help="Refresh")
+    soa_function_p.add_argument("retry", type=int, help="Retry")
+    soa_function_p.add_argument("expire", type=int, help="Expire")
+    soa_function_p.add_argument("minimum", type=int, help="Minimum")
+    soa_function_p.add_argument("ttl", type=int, help="TTL")
+
+    args = parser.parse_args()
+    result = parser.format_help()
+
+    # Setup authinfo
+    login = args.login
+    if login is None:
+        login = os.environ.setdefault("ATEX_LOGIN", "")
+
+    password = args.password
+    if password is None:
+        password = os.environ.setdefault("ATEX_PASSWORD", "")
+
+    if not (login and password):
+        print("Login or password is missing or can't be accessed.")
+        exit(1)
+
+    atex = request.Atex(f"{login}:{password}")
+
+    if args.function == "list":
+        result = tabulate(atex.list(),
+                          headers=["Id", "Domain name", "Tariff plan", "End date", "DNS", "Status", "Price"],
+                          tablefmt="plain")
+        print(result)
+        exit(0)
+
+    if args.function == "add":
+        result = add_function_p.format_help()
+
+        if args.add == "a":
+            result = atex.add_a(args.domain_id,
+                                args.dns_name,
+                                args.ip_address,
+                                args.ttl)
+            print(result)
+            exit(0)
+
+        if args.add == "aaaa":
+            result = atex.add_aaaa(args.domain_id,
+                                   args.dns_name,
+                                   args.ipv6_address,
+                                   args.ttl)
+            print(result)
+            exit(0)
+
+        if args.add == "mx":
+            result = atex.add_mx(args.domain_id,
+                                 args.dns_name,
+                                 args.mx_server,
+                                 args.priority,
+                                 args.ttl)
+            print(result)
+            exit(0)
+
+        if args.add == "srv":
+            result = atex.add_srv(args.domain_id,
+                                  args.priority,
+                                  args.ttl,
+                                  args.host,
+                                  args.srv_priority,
+                                  args.weight,
+                                  args.port,
+                                  args.address)
+            print(result)
+            exit(0)
+
+        if args.add == "cname":
+            result = atex.add_cname(args.domain_id,
+                                    args.dns_name,
+                                    args.sub_domain,
+                                    args.ttl)
+            print(result)
+            exit(0)
+
+        if args.add == "txt":
+            result = atex.add_txt(args.domain_id,
+                                  args.dns_name,
+                                  args.txt_record,
+                                  args.ttl)
+            print(result)
+            exit(0)
+
+        if args.add == "ns":
+            result = atex.add_ns(args.domain_id,
+                                 args.ns_name,
+                                 args.ns_field,
+                                 args.ttl)
+            print(result)
+            exit(0)
+
+    if args.function == "get":
+        result = tabulate(atex.get(args.domain_id),
+                          headers=["ID", "Host", "TTL", "Record type", "Content"],
+                          tablefmt="plain")
+        print(result)
+        exit(0)
+
+    if args.function == "edit":
+        result = edit_function_p.format_help()
+
+        if args.edit == "a":
+            result = atex.edit_a(args.record_id,
+                                 args.domain_id,
+                                 args.dns_name,
+                                 args.ip_address,
+                                 args.ttl)
+            print(result)
+            exit(0)
+
+        if args.edit == "aaaa":
+            result = atex.edit_aaaa(args.record_id,
+                                    args.domain_id,
+                                    args.dns_name,
+                                    args.ipv6_address,
+                                    args.ttl)
+            print(result)
+            exit(0)
+
+        if args.edit == "mx":
+            result = atex.edit_mx(args.record_id,
+                                  args.domain_id,
+                                  args.dns_name,
+                                  args.mx_server,
+                                  args.priority,
+                                  args.ttl)
+            print(result)
+            exit(0)
+
+        if args.edit == "srv":
+            result = atex.edit_srv(args.record_id,
+                                   args.domain_id,
+                                   args.priority,
+                                   args.ttl,
+                                   args.host,
+                                   args.srv_priority,
+                                   args.weight,
+                                   args.port,
+                                   args.address)
+            print(result)
+            exit(0)
+
+        if args.edit == "cname":
+            result = atex.edit_cname(args.record_id,
+                                     args.domain_id,
+                                     args.dns_name,
+                                     args.sub_domain,
+                                     args.ttl)
+            print(result)
+            exit(0)
+
+        if args.edit == "txt":
+            result = atex.edit_txt(args.record_id,
+                                   args.domain_id,
+                                   args.dns_name,
+                                   args.txt_record,
+                                   args.ttl)
+            print(result)
+            exit(0)
+
+        if args.edit == "ns":
+            result = atex.edit_ns(args.record_id,
+                                  args.domain_id,
+                                  args.ns_name,
+                                  args.ns_field,
+                                  args.ttl)
+            print(result)
+            exit(0)
+
+    if args.function == "delete":
+        result = atex.delete(args.record_id,
+                             args.domain_id)
+        print(result)
+        exit(0)
+
+    if args.function == "auto":
+        result = atex.auto(args.domain_id)
+        print(result)
+        exit(0)
+
+    if args.function == "dnssec":
+        result = atex.dnssec(args.domain_id)
+        print(result)
+        exit(0)
+
+    if args.function == "dnssec_enable":
+        result = atex.dnssec_enable(args.domain_id,
+                                    args.dns_to_add,
+                                    args.ds_to_add)
+        print(result)
+        exit(0)
+
+    if args.function == "soa":
+        result = atex.soa_edit(args.domain_id,
+                               args.dns_name,
+                               args.email,
+                               args.refresh,
+                               args.retry,
+                               args.expire,
+                               args.minimum,
+                               args.ttl)
+        print(result)
+        exit(0)
+
+    print(result)

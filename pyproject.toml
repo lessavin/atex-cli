@@ -1,0 +1,44 @@
+[project]
+name = "atex-cli"
+version = "0.1"
+description = "Atex.ru command line tools."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["dns", "cli"]
+authors = [
+  {name = "Aleksei Savin", email = "lessavin@hotmail.com"},
+]
+maintainers = [
+  {name = "Aleksei Savin", email = "lessavin@hotmail.com"},
+]
+dependencies = [
+    "certifi==2025.8.3",
+    "charset-normalizer==3.4.3",
+    "idna==3.10",
+    "requests==2.32.5",
+    "tabulate==0.9.0",
+    "urllib3==2.5.0"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[project.urls]
+Repository = "https://codeberg.org/lessavin/atex-cli.git"
+
+[project.scripts]
+atex-cli = "atex:run_cli"
+
+[build-system]
+requires = ["setuptools >= 80.9.0"]
+build-backend = "setuptools.build_meta"
